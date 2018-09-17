@@ -31,6 +31,7 @@ public class DirtyWASDMove : MonoBehaviour
             if (Physics.Raycast(Camera.main.gameObject.transform.position, ray.direction, out hit))
                 print("Found an object - distance: " + hit.distance);
             targetDir = hit.point - transform.position;
+            targetDir.y += 1;
         }
         else targetDir = pos - transform.position;
 
