@@ -32,6 +32,11 @@ io.on("connection", function(socket){
 	
 	});
 	
+	socket.on("MOVE", function(data){
+		currentUser.position = data.position;
+		socket.emit("MOVE", currentUser);
+		
+	});
 });
 server.listen(app.get('port'), function() {
 	console.log('---SERVER IS RUNNING AT '+ app.get('port')+'---')
