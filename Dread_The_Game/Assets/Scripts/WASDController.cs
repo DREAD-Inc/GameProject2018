@@ -5,7 +5,7 @@ using UnityEngine;
 public class WASDController : MonoBehaviour
 {
 
-    public float speed;
+    public float speed = 6;
     private Rigidbody rBody;
     private Camera cam;
     private Vector3 input;
@@ -16,7 +16,7 @@ public class WASDController : MonoBehaviour
     void Start()
     {
         rBody = GetComponent<Rigidbody>();
-        cam = FindObjectOfType<Camera>();
+        cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
     }
 
     void Update()
@@ -25,9 +25,11 @@ public class WASDController : MonoBehaviour
         velocity = input * speed;
 
         Ray camRay = cam.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Input.GetButton("Fire1") && Physics.Raycast(camRay, out hit))
+        RaycastHit hit; //--
+        if (Input.GetButton("Fire1") && Physics.Raycast(camRay, out hit)){
             lookDir = hit.point - transform.position;
+            Debug.DrawLine(cam.transform.position, hit.point, Color.red);
+        }
         else if (input.normalized != Vector3.zero) lookDir = input.normalized;
     }
 
