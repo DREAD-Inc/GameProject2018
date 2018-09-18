@@ -33,7 +33,12 @@ public class WASDController : MonoBehaviour
 
     void FixedUpdate()
     {
-        rBody.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir), Time.deltaTime * 10);
+        //print(lookDir +" "+transform.rotation);
+        Quaternion rotation = Quaternion.identity;
+        if (lookDir != Vector3.zero && transform.forward != Vector3.zero)
+            rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir), Time.deltaTime * 10);
+
+        rBody.rotation = rotation;
         rBody.velocity = velocity;
     }
 }
