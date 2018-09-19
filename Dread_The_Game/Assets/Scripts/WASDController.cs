@@ -9,27 +9,34 @@ public class WASDController : MonoBehaviour
     private Rigidbody rBody;
     private Camera cam;
     private Vector3 input;
+    private Vector3 inputArrow;
     private Vector3 velocity;
 
-    private Vector3 lookDir;
+    private Vector3 lookDir; //default instantiated as (0,0,0)
 
     void Start()
     {
         rBody = GetComponent<Rigidbody>();
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+
     }
 
     void Update()
     {
         input = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
+        inputArrow = new Vector3(Input.GetAxisRaw("HorizontalA"), 0f, Input.GetAxisRaw("VerticalA"));
+
+        //input
         velocity = input * speed;
 
         Ray camRay = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit; //--
-        if (Input.GetButton("Fire1") && Physics.Raycast(camRay, out hit)){
+        if (Input.GetButton("Fire1") && Physics.Raycast(camRay, out hit))
+        {
             lookDir = hit.point - transform.position;
             Debug.DrawLine(cam.transform.position, hit.point, Color.red);
         }
+        else if (inputArrow.normalized != Vector3.zero) lookDir = inputArrow.normalized;
         else if (input.normalized != Vector3.zero) lookDir = input.normalized;
     }
 
