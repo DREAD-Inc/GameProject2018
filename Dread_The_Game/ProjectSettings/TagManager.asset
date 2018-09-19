@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - GroundPlane
+  - Surface
+  - Global
   layers:
   - Default
   - TransparentFX
