@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44659364, g: 0.4964301, b: 0.5748256, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -770,7 +770,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 769826552}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 168904225bd083c4e9a65d6b1ec583ab, type: 3}
+  m_Script: {fileID: 11500000, guid: e1a270d7eb0deba47a4a3daf9ea1e535, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &769826555
@@ -781,16 +781,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 769826552}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc4bf81da34df6f429f9f17aa97b4ca5, type: 3}
+  m_Script: {fileID: 11500000, guid: ef719befc2807384f81ec7ecccba2993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: Player
   health: 100
-  weapon: Laser
+  weapon: 0
   rangeMultiplier: 10
   speed: 8
-  jumpDistance: 22
-  dashDistance: 5
+  jumpDistance: 14
+  dashDistance: 7
 --- !u!114 &769826556
 MonoBehaviour:
   m_ObjectHideFlags: 0

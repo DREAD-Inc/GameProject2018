@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     private Transform groundChecker;
     private Rigidbody rBody;
     private Camera cam;
-    private CharacterAttributes ca;
+    private Player ca;
 
     void Start()
     {
@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         rBody = GetComponent<Rigidbody>();
         rBody.drag = 4; // Used for dash. Change dashDistance in char attributes instead
-        ca = GetComponent<CharacterAttributes>();
+        ca = GetComponent<Player>();
     }
 
 
@@ -75,7 +75,10 @@ public class PlayerController : MonoBehaviour
         Ray camRay = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Input.GetButton("Fire1") && Physics.Raycast(camRay, out hit))
+        {
             forward = hit.point - transform.position;
+            forward.y = 0;
+        }
         else if (inputArrow != Vector3.zero) forward = inputArrow; //when Mouse1 isnt pressed set the look direction to the key input
         else if (input != Vector3.zero) forward = input;
 
