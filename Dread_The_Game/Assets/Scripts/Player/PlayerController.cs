@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/* This file handles movement and physics for the player. */
 public class PlayerController : MonoBehaviour
 {
     public float smoothSpeed = 10f;
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
         groundChecker = transform.GetChild(0);
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         rBody = GetComponent<Rigidbody>();
+        rBody.drag = 4; // Used for dash. Change dashDistance in char attributes instead
         ca = GetComponent<CharacterAttributes>();
     }
 
@@ -45,8 +47,6 @@ public class PlayerController : MonoBehaviour
         //Movement Actions 
         if (Input.GetButtonDown("Jump")) doJump = true;
         if (Input.GetButtonDown("Dash")) doDash = true;
-
-
     }
 
     //Physics are not calculated in sync with the normal update (where input should be collected),  

@@ -7,12 +7,12 @@ public class PlayerShoot : MonoBehaviour
 
     private float rangeMultiplier;
     private WeaponHandler weaponHandler;
+
+    private CharacterAttributes ca;
     // Use this for initialization
     void Start()
     {
-        //if type==enemy
-        //if type==player
-        rangeMultiplier = GetComponent<CharacterAttributes>().rangeMultiplier;
+        ca = GetComponent<CharacterAttributes>();
         weaponHandler = GameObject.FindGameObjectWithTag("Global").GetComponent<WeaponHandler>();
     }
 
@@ -21,7 +21,7 @@ public class PlayerShoot : MonoBehaviour
     {
         if (Input.GetButton("Fire1"))
         {
-            weaponHandler.ShootMain("");
+            weaponHandler.ShootMain(ca.weapon);
 
         }
     }

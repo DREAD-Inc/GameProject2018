@@ -17,12 +17,7 @@ public class CharacterAttributes : MonoBehaviour
     public float jumpDistance = 14f;
     public float dashDistance = 7f;
 
-    // Use this for initialization
     void Start() { }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    void Update() { }
 }
