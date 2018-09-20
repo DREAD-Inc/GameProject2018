@@ -20,12 +20,11 @@ public class WeaponHandler : MonoBehaviour
     private void InstantiateWeapon()
     {
         //currentWeapon = w;
-        print("Prefabs/Weapons/" + currentWeapon);
         prefab = (GameObject)Resources.Load("Prefabs/Weapons/" + currentWeapon, typeof(GameObject));
         //prefab.transform.position = 
         GameObject w = Instantiate(prefab, new Vector3(0, 0f, 0f), Quaternion.identity);
         w.transform.parent = gameObject.transform;
-        w.transform.position += new Vector3(-0.55f, 2.25f, 0); //TODO: get values from character attributes 
+        w.transform.position += new Vector3(-0.55f, 2.06f, 0); //TODO: get values from character attributes 
     }
     public void SetCurrentWeapon(weapons w)
     {

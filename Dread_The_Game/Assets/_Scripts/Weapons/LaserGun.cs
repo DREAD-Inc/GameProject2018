@@ -7,10 +7,7 @@ public class LaserGun : Weapon
 
     void Start()
     {
-        //projectile = (GameObject)Resources.Load("Prefabs/Projectiles/LaserGun", typeof(GameObject));
         projectile = transform.Find("Projectile");
-        //projectile = transform.GetChild(2);
-        //print();
     }
 
     void Update()
@@ -21,7 +18,6 @@ public class LaserGun : Weapon
 
     public override void Shoot()
     {
-        //print("Shooting Laser");
         projectile.gameObject.SetActive(true);
     }
 }

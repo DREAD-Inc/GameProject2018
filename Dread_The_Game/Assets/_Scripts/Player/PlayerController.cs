@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     {
         groundChecker = transform.GetChild(0);
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        cam.GetComponent<FollowCam>().target = transform.Find("FollowTarget");
         rBody = GetComponent<Rigidbody>();
         rBody.drag = 4; // Used for dash. Change dashDistance in char attributes instead
         ca = GetComponent<Player>();
