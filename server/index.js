@@ -37,7 +37,18 @@ io.on("connection", function(socket){
 		socket.emit("MOVE", currentUser);
 		
 	});
+
+	socket.on("disconnect", function(){
+		socket.broadcast.emit("USER_DISCONNECTED", currentUser);
+		for (var i = 0; i < clients.length; i++){
+			if (client[i].name = currentUser.name){
+				console.log( "User " + clients[i].name + " Disconnected");
+				client.splice(i,1);
+			}
+		}
+	});
 });
+
 server.listen(app.get('port'), function() {
 	console.log('---SERVER IS RUNNING AT '+ app.get('port')+'---')
 });
