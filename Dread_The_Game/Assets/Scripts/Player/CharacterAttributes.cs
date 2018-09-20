@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class CharacterAttributes : MonoBehaviour
 {
-
+    [Header("Base Stats")]
     public string playerName = "Player"; //+id
     public float health = 100f;
-    public float rangeMultiplier = 10f;
+
+    [Header("Weapon")]
     public string weapon = "Laser";
+    public float rangeMultiplier = 10f;
+
+    [Header("Speed / Distance")]
+    public float speed = 8f;
+    public float jumpDistance = 14f;
+    public float dashDistance = 7f;
 
     // Use this for initialization
-    void Start()
-    {
-        //wh = GetComponent<WeaponHandler>();
-    }
+    void Start() { }
 
     // Update is called once per frame
     void Update()
