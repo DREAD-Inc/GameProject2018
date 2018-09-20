@@ -8,9 +8,11 @@ public class Player : MonoBehaviour
     public string playerName = "Player"; //+id
     public float health = 100f;
 
-    [Header("Weapon")]
-    public WeaponHandler.weapons weapon = WeaponHandler.weapons.LaserGun;
-    public float rangeMultiplier = 10f;
+    [Header("Models")]
+    public ModelHandler.weapons weapon = ModelHandler.weapons.LaserGun;
+    public ModelHandler.characters character = ModelHandler.characters.CapsuleBot;
+
+    public Weapon weaponComponent;
 
 
     [Header("Speed / Distance")]
@@ -18,11 +20,12 @@ public class Player : MonoBehaviour
     public float jumpDistance = 14f;
     public float dashDistance = 7f;
 
-    private WeaponHandler wh;
+    private ModelHandler wh;
     void Start()
     {
-        wh = GetComponent<WeaponHandler>();
-        wh.SetCurrentWeapon(weapon);
+        wh = GetComponent<ModelHandler>();
+        weaponComponent = wh.InstantiateWeapon(weapon);
+        wh.InstantiateCharacter(character);
     }
 
     void Update() { }

@@ -11,22 +11,25 @@ public class PlayerController : MonoBehaviour
     //Setting and Input variables
     private float speed, jumpDistance, dashDistance;
     private Vector3 input, inputArrow, velocity, forward;
-    private bool onGround, doDash, doJump;
+    private bool onGround, doDash, doJump, isShooting;
 
     //Game Objects etc.
     private Transform groundChecker;
     private Rigidbody rBody;
     private Camera cam;
-    private Player ca;
+    private Player player;
+
+    public Weapon weapon;
 
     void Start()
     {
-        groundChecker = transform.GetChild(0);
+        groundChecker = transform.Find("GroundChecker");
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         cam.GetComponent<FollowCam>().target = transform.Find("FollowTarget");
         rBody = GetComponent<Rigidbody>();
         rBody.drag = 4; // Used for dash. Change dashDistance in char attributes instead
-        ca = GetComponent<Player>();
+        player = GetComponent<Player>();
+        weapon = player.weaponComponent;
     }
 
 
@@ -48,6 +51,11 @@ public class PlayerController : MonoBehaviour
         //Movement Actions 
         if (Input.GetButtonDown("Jump")) doJump = true;
         if (Input.GetButtonDown("Dash")) doDash = true;
+
+        //Shoot
+        if (weapon && (Input.GetButton("Fire1") || (Input.GetButton("VerticalA") || (Input.GetButton("HorizontalA")))))
+            weapon.isShooting = true;
+        else if (!weapon) weapon = player.weaponComponent;
     }
 
     //Physics are not calculated in sync with the normal update (where input should be collected),  
@@ -64,9 +72,9 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateSettings()
     {
-        speed = ca.speed;
-        jumpDistance = ca.jumpDistance;
-        dashDistance = ca.dashDistance;
+        speed = player.speed;
+        jumpDistance = player.jumpDistance;
+        dashDistance = player.dashDistance;
     }
 
     private void DetermineLookDir()

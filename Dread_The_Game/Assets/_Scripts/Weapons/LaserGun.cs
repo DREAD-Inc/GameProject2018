@@ -12,11 +12,11 @@ public class LaserGun : Weapon
 
     void Update()
     {
-        if (Input.GetButton("Fire1") || (Input.GetButton("VerticalA") || (Input.GetButton("HorizontalA")))) Shoot();
+        if (isShooting) Shoot();
         else projectile.gameObject.SetActive(false);
     }
 
-    public override void Shoot()
+    protected override void Shoot()
     {
         projectile.gameObject.SetActive(true);
     }
