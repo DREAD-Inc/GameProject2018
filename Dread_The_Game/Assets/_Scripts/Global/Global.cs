@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SocketIO;
 
 public class Global : MonoBehaviour
 {
+    public SocketIOComponent socket;
     private GameObject charPrefab;
     private GameObject otherCharPrefab;
 
