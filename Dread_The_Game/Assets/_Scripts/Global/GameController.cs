@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SocketIO;
 
-public class Global : MonoBehaviour
+public class GameController : MonoBehaviour
 {
     public SocketIOComponent socket;
     private GameObject charPrefab;
