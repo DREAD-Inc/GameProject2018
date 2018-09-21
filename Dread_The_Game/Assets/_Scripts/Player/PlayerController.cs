@@ -55,7 +55,9 @@ public class PlayerController : MonoBehaviour
         //Shoot
         if (weapon && (Input.GetButton("Fire1") || (Input.GetButton("VerticalA") || (Input.GetButton("HorizontalA")))))
             weapon.isShooting = true;
-        else if (!weapon) weapon = player.weaponComponent;
+        else if(weapon) weapon.isShooting = false;
+        
+        if (!weapon) weapon = player.weaponComponent;
     }
 
     //Physics are not calculated in sync with the normal update (where input should be collected),  
