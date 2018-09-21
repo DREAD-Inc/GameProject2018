@@ -7,6 +7,7 @@ var io = require('socket.io').listen(server);
 app.set('port', process.env.PORT || 3000);
 
 var clients = [];
+var id = 0;
 var OnlinePlayerNum = 0;
 io.on("connection", function(socket){
 	// var currentUser;
@@ -14,6 +15,7 @@ io.on("connection", function(socket){
 
 	socket.on("USER_CONNECT", function (){
 	OnlinePlayerNum++;
+	socket.emit("PLAYER_ID",id);
 	socket.broadcast.emit("SOMEONE_JOINED");
 	});
 
