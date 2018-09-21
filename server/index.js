@@ -7,19 +7,31 @@ var io = require('socket.io').listen(server);
 app.set('port', process.env.PORT || 3000);
 
 var clients = [];
-
+var OnlinePlayerNum = 0;
 io.on("connection", function(socket){
-	var currentUser;
-	
+	// var currentUser;
+	var AllReadyOnline = [];
+
 	socket.on("USER_CONNECT", function (){
-		console.log("user connected");
-		for (var i = 0; i = clients.lenght ; i--) {
-			socket.emit("USER_CONNECTED", {name:clients[i].name, position:clients[i].position})
+	OnlinePlayerNum++;
+	socket.broadcast.emit("SOMEONE_JOINED");
+	});
 
-			console.log("user "+clients[i].name+ " has connected")
-
+	socket.on("REPLAY_TO_CONNECT",(userData)=>{
+		AllReadyOnline.push(userData);
+		if(AllReadyOnline.length == OnlinePlayerNum -1){
+			socket.emit("ALL_USERS_INFO", AllReadyOnline);
 		}
 	});
+
+
+
+
+
+
+
+
+
 
 	socket.on("PLAY", function( data ){
 		currentUser = {
