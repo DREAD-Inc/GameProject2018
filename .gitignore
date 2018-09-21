@@ -26,6 +26,7 @@ coverage
 # Bower dependency directory (https://bower.io/)
 bower_components
 
+
 # node-waf configuration
 .lock-wscript
 
@@ -66,6 +67,9 @@ typings/
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
+
+#### Ignore shaderforge folder so it can still be used
+[Ss]haderForge/
 Assets/AssetStoreTools*
 
 # Visual Studio cache directory
