@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        socket = GetComponent<SocketIOComponent>();
         charPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/Player", typeof(GameObject));
         otherCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject));
         mapPrefab = (GameObject)Resources.Load("Prefabs/Maps/TestMap", typeof(GameObject));
