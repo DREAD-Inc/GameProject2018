@@ -8,11 +8,16 @@ public class GameController : MonoBehaviour
     public SocketIOComponent socket;
     private GameObject charPrefab;
     private GameObject otherCharPrefab;
-
     private GameObject mapPrefab;
-
+    public List<Object> PlayerList;
     void Start()
     {
+
+        StartCoroutine(ConnectToServer());
+		//socket.Emit("USER_CONNECT");
+       //socket.On("PLAYER_ID", OnIdProvided);
+        socket.On("PLAYER_ID", OnIdProvided);
+
         charPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/Player", typeof(GameObject));
         otherCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject));
         mapPrefab = (GameObject)Resources.Load("Prefabs/Maps/TestMap", typeof(GameObject));
@@ -28,5 +33,26 @@ public class GameController : MonoBehaviour
     {
 
     }
+	IEnumerator ConnectToServer(){
+		yield return new WaitForSeconds(0.5f);
+	 	socket.Emit("USER_CONNECT");
 
+
+		//Sample data for testing
+		Dictionary<string,string> data = new Dictionary<string,string>();
+		data["name"] = "Fuckerman";
+		Vector3 position = new Vector3(0,0,0);
+		data["position"] = position.x + " , " + position.y + " , " + position.z;
+
+		socket.Emit("PLAY", new JSONObject(data));
+	}
+
+
+	// private void OnUserConnected( SocketIOEvent evt){
+	// 	Debug.Log("The message from server is "+ evt.data );
+	// }
+     private void OnIdProvided( SocketIOEvent evt){
+		Debug.Log("The Provided id is " + evt.data );
+	}
+    
 }
