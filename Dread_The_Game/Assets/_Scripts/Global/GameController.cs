@@ -9,7 +9,7 @@ public class GameController : MonoBehaviour
     private GameObject charPrefab;
     private GameObject otherCharPrefab;
     private GameObject mapPrefab;
-    public List<OtherPlayerParams> playerList;
+    public List<PlayerParams> playerList;
 
     void Start()
     {
@@ -53,8 +53,7 @@ public class GameController : MonoBehaviour
 	// 	Debug.Log("The message from server is "+ evt.data );
 	// }
      private void initiatePlayer( SocketIOEvent evt){
-        var data =  JsonUtility.FromJson<OtherPlayerParams>(evt.data);
-		Debug.Log("The Provided id is " + data);
+		Debug.Log("The Provided id is " + evt.data);
         
         Instantiate(charPrefab, new Vector3(0, 2f, 0f), Quaternion.Euler(0, -90, 0));
 
