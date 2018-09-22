@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [Header("Base Stats")]
+    public int id;
     public string playerName = "Player"; //+id
     public float health = 100f;
 

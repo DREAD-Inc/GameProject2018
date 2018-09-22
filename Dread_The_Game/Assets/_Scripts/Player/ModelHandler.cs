@@ -10,8 +10,8 @@ public class ModelHandler : MonoBehaviour
     public enum characters { CapsuleBot }
 
 
-    private weapons currentWeapon = weapons.LaserGun;
-    private characters currentCharacter = characters.CapsuleBot;
+    //private weapons currentWeapon = weapons.LaserGun;
+    //private characters currentCharacter = characters.CapsuleBot;
 
     private GameObject prefab;
 
@@ -23,8 +23,7 @@ public class ModelHandler : MonoBehaviour
         prefab = (GameObject)Resources.Load("Prefabs/Weapons/" + weapon, typeof(GameObject));
         GameObject w = Instantiate(prefab, new Vector3(0, 0f, 0f), Quaternion.identity);
         w.transform.parent = gameObject.transform;
-        //w.transform.position += init posX and posY 
-        w.transform.position += new Vector3(-0.55f, 2.06f, 0); //TODO: get values from character attributes (weapon pos depends on char model dimensions)
+        w.transform.position += new Vector3(-0.55f, 2.06f, 0); //TODO: add empty gameobject to charactermodel and set it to weapons parent
         return w.GetComponent<Weapon>();
     }
 
@@ -33,6 +32,5 @@ public class ModelHandler : MonoBehaviour
         prefab = (GameObject)Resources.Load("Prefabs/CharacterModels/" + character, typeof(GameObject));
         GameObject c = Instantiate(prefab, new Vector3(0, 2f, 0f), Quaternion.identity);
         c.transform.parent = gameObject.transform;
-        //.transform.position += init posX and posY
     }
 }

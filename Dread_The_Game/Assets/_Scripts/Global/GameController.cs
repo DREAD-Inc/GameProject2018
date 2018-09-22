@@ -15,7 +15,7 @@ public class GameController : MonoBehaviour
     private Helpers helpers = new Helpers();
     void Start()
     {
-        
+
         socket = GetComponent<SocketIOComponent>();
 
         //We need to wait for few ms before emiting
@@ -39,36 +39,38 @@ public class GameController : MonoBehaviour
     {
 
     }
-	IEnumerator ConnectToServer(){
-		yield return new WaitForSeconds(0.5f);
-	 	socket.Emit("USER_CONNECT");
-		//socket.Emit("PLAY", new JSONObject(data));
-	}
+    IEnumerator ConnectToServer()
+    {
+        yield return new WaitForSeconds(0.5f);
+        socket.Emit("USER_CONNECT");
+        //socket.Emit("PLAY", new JSONObject(data));
+    }
 
 
 
-     private void initiatePlayer( SocketIOEvent evt){
+    private void initiatePlayer(SocketIOEvent evt)
+    {
 
-        var id = Int32.Parse(evt.data.GetField("id").ToString()); 
-		Debug.Log("The Provided id is " + id);
-        // We should make it possible to initiate with the id
-        Instantiate(charPrefab, new Vector3(0, 2f, 0f), Quaternion.Euler(0, -90, 0));
-
+        var id = Int32.Parse(evt.data.GetField("id").ToString());
+        Debug.Log("The Provided id is " + id);
+        var character = Instantiate(charPrefab, new Vector3(0, 2f, 0f), Quaternion.Euler(0, -90, 0));
+        character.GetComponent<Player>().id = id;
         Quaternion rotation = new Quaternion();
-        helpers.setQuaternion(rotation, 0 , -90 , 0);
-	    PlayerParams playerParams = new PlayerParams(id, "UnNamed", new Vector3(0, 2f, 0f), rotation, new ModelHandler.characters(), new ModelHandler.weapons());
+        helpers.setQuaternion(rotation, 0, -90, 0);
+        PlayerParams playerParams = new PlayerParams(id, "UnNamed", new Vector3(0, 2f, 0f), rotation, new ModelHandler.characters(), new ModelHandler.weapons());
         var data = helpers.playerParamsToJSON(playerParams);
 
         socket.Emit("USER_INITIATED", data);
 
-	}
-    private void addNewPlayer(SocketIOEvent evt){
-        
+    }
+    private void addNewPlayer(SocketIOEvent evt)
+    {
+
         Debug.Log("New players position is" + evt.data.GetField("position"));
         Debug.Log(evt.data.GetType());
     }
 
 
-    
-    
+
+
 }
