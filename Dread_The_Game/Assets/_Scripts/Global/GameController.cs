@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour
     public List<Object> PlayerList;
     void Start()
     {
-
+        socket = GetComponent<SocketIOComponent>();
         StartCoroutine(ConnectToServer());
 		//socket.Emit("USER_CONNECT");
        //socket.On("PLAYER_ID", OnIdProvided);
