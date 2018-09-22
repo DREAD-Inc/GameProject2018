@@ -21,6 +21,9 @@ public class GameController : MonoBehaviour
         //We need to wait for few ms before emiting
         StartCoroutine(ConnectToServer());
         socket.On("PLAYER_ID", initiatePlayer);
+        socket.On("A_USER_INITIATED", addNewPlayer);
+
+
 
         charPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/Player", typeof(GameObject));
         otherCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject));
@@ -51,13 +54,19 @@ public class GameController : MonoBehaviour
         // We should make it possible to initiate with the id
         Instantiate(charPrefab, new Vector3(0, 2f, 0f), Quaternion.Euler(0, -90, 0));
 
-	   //Sample data for testing
-	
-        var data = helpers.playerParamsToDict(id, "UnNamed", "Default", "Default",new Vector3(0, 2f, 0f), new int[] {0, -90, 0}, false);
+        Quaternion rotation = new Quaternion();
+        helpers.setQuaternion(rotation, 0 , -90 , 0);
+	    PlayerParams playerParams = new PlayerParams(id, "UnNamed", new Vector3(0, 2f, 0f), rotation, new ModelHandler.characters(), new ModelHandler.weapons());
+        var data = helpers.playerParamsToJSON(playerParams);
 
-        socket.Emit("USER_INITIATED", new JSONObject(data));
+        socket.Emit("USER_INITIATED", data);
 
 	}
+    private void addNewPlayer(SocketIOEvent evt){
+        
+        Debug.Log("New players position is" + evt.data.GetField("position"));
+        Debug.Log(evt.data.GetType());
+    }
 
 
     

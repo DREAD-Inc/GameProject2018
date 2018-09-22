@@ -10,29 +10,35 @@ public Helpers(){
 
 }
 
+public void setQuaternion(Quaternion rotation, int x, int y, int z){
+	rotation.x = x;
+	rotation.y = y;
+	rotation.z = z;
+}
+
 // This method converts JSON to Vector3 object
-public Vector3 JsonToVector3(string target){
+public Vector3 jsonToVector3(string target){
 	Vector3 myVector3;
 	string[] arrayOfData = Regex.Split(target, ",");
 	myVector3 = new Vector3(float.Parse(arrayOfData[0]), float.Parse(arrayOfData[1]), float.Parse(arrayOfData[2]));
 	return myVector3;
 } 
 
-// This method converts the player parameters to a data type of Dictionary for passing it to JSON 
-public Dictionary<string,string> playerParamsToDict (int id, string name , string charachter ,string weapon, Vector3 position, int [] rotation, bool isShooting)
+// This method converts the PlayerParams object to JSON 
+public JSONObject playerParamsToJSON (PlayerParams playerParams)
 {
 		Dictionary<string,string> data = new Dictionary<string,string>();
-		data["id"] = id.ToString();
-		data["name"] = name;
-		data["charachter"] = charachter;
-		data["weapon"] = weapon;
-		data["position"] = position.x + " , " + position.y + " , " + position.z;
-		data["rotation"] = rotation[0] + " , " + rotation[1] + " , " + rotation[2];
-		data["isShooting"] = isShooting? "true":"false";
-		return data;
-
+		data["id"] = playerParams.getId().ToString();
+		data["name"] = playerParams.getName();
+		data["position"] = playerParams.getPosition().x + " , " + playerParams.getPosition().y + " , " + playerParams.getPosition().z;
+		data["rotation"] = playerParams.getRotation().x + " , " + playerParams.getRotation().y + " , " + playerParams.getRotation().z;
+		data["charachter"] = "default";
+		data["weapon"] = "default";
+		data["isShooting"] = playerParams.getIsShooting()? "true":"false";
+		return new JSONObject(data);
 } 
+public PlayerParams JSONToPlayerParams (JSONObject data){
 
-
-
+return null; 
+}
 }
