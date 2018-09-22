@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Text;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SocketIO;
@@ -10,7 +12,7 @@ public class GameController : MonoBehaviour
     private GameObject otherCharPrefab;
     private GameObject mapPrefab;
     public List<PlayerParams> playerList;
-
+    private Helpers helpers = new Helpers();
     void Start()
     {
         
@@ -37,26 +39,27 @@ public class GameController : MonoBehaviour
 	IEnumerator ConnectToServer(){
 		yield return new WaitForSeconds(0.5f);
 	 	socket.Emit("USER_CONNECT");
-
-
-		//Sample data for testing
-		Dictionary<string,string> data = new Dictionary<string,string>();
-		data["name"] = "Fuckerman";
-		Vector3 position = new Vector3(0,0,0);
-		data["position"] = position.x + " , " + position.y + " , " + position.z;
-
-		socket.Emit("PLAY", new JSONObject(data));
+		//socket.Emit("PLAY", new JSONObject(data));
 	}
 
 
-	// private void OnUserConnected( SocketIOEvent evt){
-	// 	Debug.Log("The message from server is "+ evt.data );
-	// }
+
      private void initiatePlayer( SocketIOEvent evt){
-		Debug.Log("The Provided id is " + evt.data);
-        
+
+        var id = Int32.Parse(evt.data.GetField("id").ToString()); 
+		Debug.Log("The Provided id is " + id);
+        // We should make it possible to initiate with the id
         Instantiate(charPrefab, new Vector3(0, 2f, 0f), Quaternion.Euler(0, -90, 0));
 
+	   //Sample data for testing
+	
+        var data = helpers.playerParamsToDict(id, "UnNamed", "Default", "Default",new Vector3(0, 2f, 0f), new int[] {0, -90, 0}, false);
+
+        socket.Emit("USER_INITIATED", new JSONObject(data));
+
 	}
+
+
+    
     
 }

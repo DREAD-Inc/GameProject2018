@@ -20,7 +20,9 @@ io.on("connection", function(socket){
 	socket.emit("PLAYER_ID", {"id":id});
 	socket.broadcast.emit("SOMEONE_JOINED");
 	});
-
+    socket.on("USER_INITIATED",(userData)=>{
+		console.log(userData);
+	});
 	// socket.on("REPLAY_TO_CONNECT",(userData)=>{
 	// 	AllReadyOnline.push(userData);
 	// 	if(AllReadyOnline.length == OnlinePlayerNum -1){
