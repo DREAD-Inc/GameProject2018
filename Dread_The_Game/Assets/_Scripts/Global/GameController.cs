@@ -70,6 +70,9 @@ public class GameController : MonoBehaviour
     {
 
        PlayerParams newPlayerParams = helpers.JSONToPlayerParams(evt.data);
+       GameObject newCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject));;
+       Instantiate(newCharPrefab, newPlayerParams.getPosition(), Quaternion.Euler(newPlayerParams.getRotation().x, newPlayerParams.getRotation().y, newPlayerParams.getRotation().z));
+       newCharPrefab.GetComponent<Player>().id = newPlayerParams.getId();
        Debug.Log(newPlayerParams.getPosition());
        playerList.Add(newPlayerParams);
 
