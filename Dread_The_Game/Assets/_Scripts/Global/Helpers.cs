@@ -16,14 +16,16 @@ public string removeQuotationMark( string data){
 	return tempArray[1];
 }
 
-public void setQuaternion(ref Quaternion rotation, float x, float y, float z){
+public void setQuaternion(ref Quaternion rotation, float x, float y, float z)
+{
 	rotation.x = x;
 	rotation.y = y;
 	rotation.z = z;
 }
 
 // This method converts JSON to Vector3 object
-public Vector3 jsonToVector3(string target){
+public Vector3 jsonToVector3(string target)
+{
 	Vector3 myVector3;
 	string[] arrayOfData = Regex.Split(target, ",");
 	myVector3 = new Vector3(float.Parse(arrayOfData[0]), float.Parse(arrayOfData[1]), float.Parse(arrayOfData[2]));
@@ -45,9 +47,8 @@ public JSONObject playerParamsToJSON (PlayerParams playerParams)
 } 
 
 // This method converts the JSON object to PlayerParams object
-public PlayerParams JSONToPlayerParams (JSONObject data){
-
-   
+public PlayerParams JSONToPlayerParams (JSONObject data)
+{
 		var id = Int32.Parse(removeQuotationMark(data.GetField("id").ToString())); 
 
 		string name = removeQuotationMark(data.GetField("name").ToString());

@@ -16,7 +16,7 @@ public class GameController : MonoBehaviour
     private Helpers helpers = new Helpers();
     void Start()
     {
-        
+
         socket = GetComponent<SocketIOComponent>();
 
         //We need to wait for few ms before emiting
@@ -40,43 +40,43 @@ public class GameController : MonoBehaviour
     {
 
     }
-	IEnumerator ConnectToServer(){
-		yield return new WaitForSeconds(0.5f);
-	 	socket.Emit("USER_CONNECT");
-		//socket.Emit("PLAY", new JSONObject(data));
-	}
+    IEnumerator ConnectToServer()
+    {
+        yield return new WaitForSeconds(0.5f);
+        socket.Emit("USER_CONNECT");
+        //socket.Emit("PLAY", new JSONObject(data));
+    }
 
 
 
-     private void initiatePlayer( SocketIOEvent evt){
 
-       // Debug.Log(evt.data);
-        var id = Int32.Parse(evt.data.GetField("id").ToString()); 
-		Debug.Log( evt.data.GetField("id").ToString());
-        // We should make it possible to initiate with the id
-        Instantiate(charPrefab, new Vector3(0, 2f, 0f), Quaternion.Euler(0, -90, 0));
+    private void initiatePlayer(SocketIOEvent evt)
+    {
 
+        var id = Int32.Parse(evt.data.GetField("id").ToString());
+        Debug.Log("The Provided id is " + id);
+        var character = Instantiate(charPrefab, new Vector3(0, 2f, 0f), Quaternion.Euler(0, -90, 0));
+        character.GetComponent<Player>().id = id;
         Quaternion rotation = new Quaternion();
         helpers.setQuaternion(ref rotation, 0 , -90 , 0);
 	    PlayerParams playerParams = new PlayerParams(id, "UnNamed", new Vector3(0, 2f, 0f), rotation, new ModelHandler.characters(), new ModelHandler.weapons());
+
         var data = helpers.playerParamsToJSON(playerParams);
 
         socket.Emit("USER_INITIATED", data);
 
 	}
-    private void addNewPlayer(SocketIOEvent evt){
+    private void addNewPlayer(SocketIOEvent evt)
+    {
                 // Debug.Log(evt.data);
 
        PlayerParams newPlayerParams = helpers.JSONToPlayerParams(evt.data);
        
         Debug.Log(newPlayerParams.getPosition());
 
-
-
-    
     }
 
 
-    
-    
+
+
 }
