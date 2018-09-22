@@ -25,6 +25,7 @@ public class GameController : MonoBehaviour
 
         socket.On("PLAYER_ID", initiatePlayer);
         socket.On("A_USER_INITIATED", addNewPlayer);
+        socket.On("GET_EXISTING_PLAYER", addExistingPlayer);
 
         charPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/Player", typeof(GameObject));
         otherCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject));
@@ -44,7 +45,6 @@ public class GameController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         socket.Emit("USER_CONNECT");
-        //socket.Emit("PLAY", new JSONObject(data));
     }
 
 
@@ -77,6 +77,16 @@ public class GameController : MonoBehaviour
        playerList.Add(newPlayerParams);
 
     }
+     private void addExistingPlayer(SocketIOEvent evt)
+     {
+         Debug.Log("existing player id is " +evt.data.GetField("id"));
+         PlayerParams newPlayerParams = helpers.JSONToPlayerParams(evt.data);
+         GameObject newCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject));;
+         Instantiate(newCharPrefab, newPlayerParams.getPosition(), Quaternion.Euler(newPlayerParams.getRotation().x, newPlayerParams.getRotation().y, newPlayerParams.getRotation().z));
+         newCharPrefab.GetComponent<Player>().id = newPlayerParams.getId();
+         playerList.Add(newPlayerParams);
+         
+     } 
 
 
 

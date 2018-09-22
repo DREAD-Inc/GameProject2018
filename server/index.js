@@ -18,9 +18,11 @@ io.on("connection", function(socket){
 	OnlinePlayerNum++;
 	id++;
 	socket.emit("PLAYER_ID", {"id":id});
-	socket.broadcast.emit("SOMEONE_JOINED");
 	});
     socket.on("USER_INITIATED",(userData)=>{
+		clients.forEach(player => {
+			socket.emit("GET_EXISTING_PLAYER",player)
+		});
 		clients.push(userData);
 		console.log(userData);
 		socket.broadcast.emit("A_USER_INITIATED",userData)
