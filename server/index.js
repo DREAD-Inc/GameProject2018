@@ -23,7 +23,7 @@ io.on("connection", function(socket){
     socket.on("USER_INITIATED",(userData)=>{
 		clients.push(userData);
 		console.log(userData);
-		io.emit("A_USER_INITIATED",userData)
+		socket.broadcast.emit("A_USER_INITIATED",userData)
 	});
 	// socket.on("REPLAY_TO_CONNECT",(userData)=>{
 	// 	AllReadyOnline.push(userData);

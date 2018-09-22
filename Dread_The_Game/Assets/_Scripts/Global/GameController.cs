@@ -13,18 +13,18 @@ public class GameController : MonoBehaviour
     private GameObject otherCharPrefab;
     private GameObject mapPrefab;
     public List<PlayerParams> playerList;
-    private Helpers helpers = new Helpers();
+    private Helpers helpers;
     void Start()
     {
-
         socket = GetComponent<SocketIOComponent>();
+        playerList = new List<PlayerParams>();
+        helpers = new Helpers();
 
         //We need to wait for few ms before emiting
         StartCoroutine(ConnectToServer());
+
         socket.On("PLAYER_ID", initiatePlayer);
         socket.On("A_USER_INITIATED", addNewPlayer);
-
-
 
         charPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/Player", typeof(GameObject));
         otherCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject));
@@ -68,11 +68,10 @@ public class GameController : MonoBehaviour
 	}
     private void addNewPlayer(SocketIOEvent evt)
     {
-                // Debug.Log(evt.data);
 
        PlayerParams newPlayerParams = helpers.JSONToPlayerParams(evt.data);
-       
-        Debug.Log(newPlayerParams.getPosition());
+       Debug.Log(newPlayerParams.getPosition());
+       playerList.Add(newPlayerParams);
 
     }
 
