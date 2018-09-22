@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -49,13 +50,14 @@ public class GameController : MonoBehaviour
 
      private void initiatePlayer( SocketIOEvent evt){
 
+       // Debug.Log(evt.data);
         var id = Int32.Parse(evt.data.GetField("id").ToString()); 
-		Debug.Log("The Provided id is " + id);
+		Debug.Log( evt.data.GetField("id").ToString());
         // We should make it possible to initiate with the id
         Instantiate(charPrefab, new Vector3(0, 2f, 0f), Quaternion.Euler(0, -90, 0));
 
         Quaternion rotation = new Quaternion();
-        helpers.setQuaternion(rotation, 0 , -90 , 0);
+        helpers.setQuaternion(ref rotation, 0 , -90 , 0);
 	    PlayerParams playerParams = new PlayerParams(id, "UnNamed", new Vector3(0, 2f, 0f), rotation, new ModelHandler.characters(), new ModelHandler.weapons());
         var data = helpers.playerParamsToJSON(playerParams);
 
@@ -63,9 +65,15 @@ public class GameController : MonoBehaviour
 
 	}
     private void addNewPlayer(SocketIOEvent evt){
-        
-        Debug.Log("New players position is" + evt.data.GetField("position"));
-        Debug.Log(evt.data.GetType());
+                // Debug.Log(evt.data);
+
+       PlayerParams newPlayerParams = helpers.JSONToPlayerParams(evt.data);
+       
+        Debug.Log(newPlayerParams.getPosition());
+
+
+
+    
     }
 
 
