@@ -9,13 +9,14 @@ public class GameController : MonoBehaviour
     private GameObject charPrefab;
     private GameObject otherCharPrefab;
     private GameObject mapPrefab;
-    public List<Object> PlayerList;
+    public List<OtherPlayerParams> playerList;
     void Start()
     {
+        
         socket = GetComponent<SocketIOComponent>();
+
+        //We need to wait for few ms before emiting
         StartCoroutine(ConnectToServer());
-		//socket.Emit("USER_CONNECT");
-       //socket.On("PLAYER_ID", OnIdProvided);
         socket.On("PLAYER_ID", OnIdProvided);
 
         charPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/Player", typeof(GameObject));
