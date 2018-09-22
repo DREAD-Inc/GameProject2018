@@ -61,8 +61,8 @@ public PlayerParams JSONToPlayerParams (JSONObject data)
 		for(int i = 0; i<3; i++){
 			positionAsArray[i] = float.Parse(tempPositionAsArray[i]);
 		}
-		
 		Vector3 position = new Vector3(positionAsArray[0],positionAsArray[1],positionAsArray[2]);
+
 		//rotation
 		var rotationString = removeQuotationMark(data.GetField("rotation").ToString());
 		var tempRotationAsArray = Regex.Split(rotationString, ",");
