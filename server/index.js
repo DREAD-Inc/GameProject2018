@@ -17,7 +17,7 @@ io.on("connection", function(socket){
 	console.log("hey");
 	OnlinePlayerNum++;
 	id++;
-	socket.emit("PLAYER_ID", {id});
+	socket.emit("PLAYER_ID", {"id":id});
 	socket.broadcast.emit("SOMEONE_JOINED");
 	});
 
