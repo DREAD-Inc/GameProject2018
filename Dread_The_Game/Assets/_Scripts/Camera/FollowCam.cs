@@ -25,7 +25,7 @@ public class FollowCam : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!target) { print("No camera target set for " + gameObject.name); return; }
+        if (!target) { return; }
 
         float num = Input.GetAxis("Mouse ScrollWheel");
         distance -= num * scrollSens;
