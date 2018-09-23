@@ -25,8 +25,21 @@ public class Player : MonoBehaviour
     void Start()
     {
         wh = GetComponent<ModelHandler>();
-        weaponComponent = wh.InstantiateWeapon(weapon);
+        wh.InstantiateWeapon(weapon);
         wh.InstantiateCharacter(character);
+    }
+
+    public void SetFromPlayerParams(PlayerParams pp)
+    {
+        id = pp.id;
+        name = pp.name;
+        playerName = pp.name;
+        health = pp.health;
+        //weapon = pp.weapon;
+        //character = pp.character;
+
+        //if (weapon != pp.weapon) { wh.InstantiateWeapon(pp.weapon); weapon = pp.weapon; }
+        //if (character != pp.character) { wh.InstantiateCharacter(pp.character); character = pp.character; }
     }
 
     void Update() { }

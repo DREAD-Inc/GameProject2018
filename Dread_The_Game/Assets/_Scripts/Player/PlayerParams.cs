@@ -7,6 +7,7 @@ public class PlayerParams
 {
     public int id;
     public string name;
+    public int health;
     public Vector3 position;
     public Quaternion rotation;
     public ModelHandler.characters character;
