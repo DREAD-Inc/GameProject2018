@@ -23,7 +23,7 @@ public class FollowCam : MonoBehaviour
 
     }
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         if (!target) { return; }
 
@@ -34,6 +34,6 @@ public class FollowCam : MonoBehaviour
         Vector3 pos = target.position + offset;
         pos -= transform.forward * distance;
 
-        transform.position = Vector3.Lerp(transform.position, pos, smooth * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, pos, smooth * 0.5f * Time.deltaTime);
     }
 }
