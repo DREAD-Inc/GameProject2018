@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     //Setting and Input variables
     private float speed, jumpDistance, dashDistance;
     private Vector3 input, inputArrow, velocity, forward;
-    private bool onGround, doDash, doJump, isShooting;
+    private bool onGround, doDash, doJump, isShooting, moved;
 
     //Game Objects etc.
     private Transform groundChecker;
@@ -20,10 +20,12 @@ public class PlayerController : MonoBehaviour
     private Player player;
 
     public Weapon weapon;
+    public GameController gameController;
 
     void Start()
     {
         groundChecker = transform.Find("GroundChecker");
+        gameController = GameObject.FindGameObjectWithTag("Global").GetComponent<GameController>();
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         cam.GetComponent<FollowCam>().target = transform.Find("FollowTarget");
         rBody = GetComponent<Rigidbody>();
@@ -41,9 +43,15 @@ public class PlayerController : MonoBehaviour
         //Check if onGround (alternative way of setting onGround that avoids "rocket jump" bug caused by OnCollisionEnter beeing called many times when next to a surface)
         onGround = Physics.CheckSphere(groundChecker.position, .1f, ground, QueryTriggerInteraction.Ignore);
 
-        //Collect input from WASD and the arrowkeys and create vectors in their respective directions. These are used for moving the char and rotating it.
-        input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")); // <-- WASD (For movement and lookDir)
-        inputArrow = new Vector3(Input.GetAxisRaw("HorizontalA"), 0, Input.GetAxisRaw("VerticalA")); // <-- Arrowkeys (overwrites WASD lookDir)
+        //Collect input from WASD and the arrowkeys
+        float horiz, horizArrow, verti, vertiArrow;
+        horiz = Input.GetAxisRaw("Horizontal");
+        horizArrow = Input.GetAxisRaw("HorizontalA");
+        verti = Input.GetAxisRaw("Vertical");
+        vertiArrow = Input.GetAxisRaw("VerticalA");
+
+        input = new Vector3(horiz, 0, verti); // <-- WASD (For movement and lookDir)
+        inputArrow = new Vector3(horizArrow, 0, vertiArrow); // <-- Arrowkeys (overwrites WASD lookDir)
 
         //Find and set the look direction of the character
         DetermineLookDir();
@@ -53,14 +61,16 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Dash")) doDash = true;
 
         //Shoot
-        if (weapon && (Input.GetButton("Fire1") || (Input.GetButton("VerticalA") || (Input.GetButton("HorizontalA")))))
+        if (weapon && (Input.GetButton("Fire1") || (vertiArrow > 0 || horizArrow > 0)))
             weapon.isShooting = true;
         else if (weapon) weapon.isShooting = false;
 
         if (!weapon) weapon = player.weaponComponent;
+
+        moved = (horiz > 0 || verti > 0 || horizArrow > 0 || vertiArrow > 0) ? true : false;
     }
 
-    //Physics are not calculated in sync with the normal update (where input should be collected),  
+    //Physics are not calculated in sync with the normal update (where input should be collected), it should be handled in FixedUpdate
     void FixedUpdate()
     {
         if (onGround && doJump) Jump();
@@ -70,6 +80,7 @@ public class PlayerController : MonoBehaviour
 
         //Increase gravity effect on the player
         rBody.AddForce(Vector3.down * 15f * rBody.mass);
+        if (moved) gameController.SendClientMovement(player.id, transform.position, transform.rotation);
     }
 
     private void UpdateSettings()

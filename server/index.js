@@ -11,7 +11,7 @@ var id = 0;
 var OnlinePlayerNum = 0;
 
 io.on("connection", function(socket) {
-  var currentUser;
+  //var currentUser;
   var AllReadyOnline = [];
 
   socket.on("USER_CONNECT", function() {
@@ -25,10 +25,11 @@ io.on("connection", function(socket) {
 
   socket.on("USER_INITIATED", userData => {
     clients.forEach(player => {
+      console.log(player);
       socket.emit("GET_EXISTING_PLAYER", player);
     });
     clients.push(userData);
-    console.log(userData);
+    console.log("userData" + userData);
     socket.broadcast.emit("A_USER_INITIATED", userData);
   });
 
@@ -50,11 +51,15 @@ io.on("connection", function(socket) {
 
   // });
 
-  // socket.on("MOVE", function(data){
-  // 	currentUser.position = data.position;
-  // 	socket.emit("MOVE", currentUser);
-
-  // });
+  socket.on("CLIENT_MOVE", function(movementData) {
+    /*console.log(movementData);
+    var data = JSON.parse(movementData);
+    for (var i = 0; i < clients.length; i++)
+      if (clients[i].id == data.id) {
+        clients[i].position = data.position;
+        clients[i].rotation = data.rotation;
+      }*/
+  });
 
   // socket.on("disconnect", function(){
   // 	socket.broadcast.emit("USER_DISCONNECTED", currentUser);
