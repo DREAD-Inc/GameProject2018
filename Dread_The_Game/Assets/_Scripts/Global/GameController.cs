@@ -37,8 +37,6 @@ public class GameController : MonoBehaviour
         mapPrefab = (GameObject)Resources.Load("Prefabs/Maps/TestMap", typeof(GameObject));
 
         Instantiate(mapPrefab);
-        Instantiate(otherCharPrefab, new Vector3(3, 2f, 0f), Quaternion.Euler(0, -90, 0));
-
     }
 
     void Update() { }
@@ -62,21 +60,16 @@ public class GameController : MonoBehaviour
         socket.Emit("USER_INITIATED", data);
     }
 
-
     private void InitiatePlayer(SocketIOEvent evt)
     {
+        PlayerNum = Int32.Parse(evt.data.GetField("num").ToString());
         var newP = JsonUtility.FromJson<PlayerParams>(evt.data.ToString());
-        if (Dbug) Debug.Log("The Provided id is " + newP.id);
+        if (Dbug) Debug.Log("The Provided id is " + newP.id + " numPlayers: " + PlayerNum);
         var character = Instantiate(charPrefab, new Vector3(0, 2f, 0f), Quaternion.Euler(0, -90, 0));
-        //character.GetComponent<Player>().id = newP.id;
-        //Quaternion rotation = new Quaternion();
-        //rotation = Quaternion.Euler(0, -90, 0); //alternatively using the Euler constructer https://docs.unity3d.com/ScriptReference/Quaternion.Euler.html
         PlayerParams playerParams = new PlayerParams(newP.id, newP.name, new Vector3(0, 2f, 0f), Quaternion.Euler(0, -90, 0), new ModelHandler.characters(), new ModelHandler.weapons());
         character.GetComponent<Player>().SetFromPlayerParams(playerParams);
-        //var data = helpers.playerParamsToJSON(playerParams);
-        var data = new JSONObject(JsonUtility.ToJson(playerParams)); //Using https://docs.unity3d.com/ScriptReference/JsonUtility.html
-
-        print("PlayerParams json" + data);
+        character.GetComponent<Rigidbody>().MovePosition(new Vector3(PlayerNum, 2f, PlayerNum));
+        var data = new JSONObject(JsonUtility.ToJson(playerParams));
         socket.Emit("USER_INITIATED", data);
     }
     private void addNewPlayer(SocketIOEvent evt)
@@ -92,11 +85,11 @@ public class GameController : MonoBehaviour
     }
     private void AddNewPlayer(SocketIOEvent evt)
     {
-
+        if (Dbug) print("Adding new player");
         PlayerParams pp = PlayerParams.CreateFromJSON(evt.data.ToString());
         var newCharacter = Instantiate(otherCharPrefab, pp.getPosition(), Quaternion.Euler(pp.getRotation().x, pp.getRotation().y, pp.getRotation().z));
         newCharacter.GetComponent<Player>().id = pp.id;
-        if (Dbug) Debug.Log(pp.getPosition());
+
         playerList.Add(pp);
     }
 
@@ -118,8 +111,8 @@ public class GameController : MonoBehaviour
         player.SetFromPlayerParams(pp);
         /*player.id = pp.id;
         player.name = pp.name; //GO name
-        player.playerName = pp.name;
-        playerList.Add(pp);*/
+        player.playerName = pp.name;*/
+        playerList.Add(pp);
     }
 
     private void SetPlayerNum(SocketIOEvent evt)

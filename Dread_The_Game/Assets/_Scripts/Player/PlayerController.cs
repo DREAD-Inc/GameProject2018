@@ -55,8 +55,8 @@ public class PlayerController : MonoBehaviour
         //Shoot
         if (weapon && (Input.GetButton("Fire1") || (Input.GetButton("VerticalA") || (Input.GetButton("HorizontalA")))))
             weapon.isShooting = true;
-        else if(weapon) weapon.isShooting = false;
-        
+        else if (weapon) weapon.isShooting = false;
+
         if (!weapon) weapon = player.weaponComponent;
     }
 

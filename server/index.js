@@ -15,11 +15,12 @@ io.on("connection", function(socket) {
   var AllReadyOnline = [];
 
   socket.on("USER_CONNECT", function() {
-    //console.log("hey");
     OnlinePlayerNum++;
-    id++;
-    socket.emit("PLAYER_ID", { id: id, name: "Player " + id });
-    socket.emit("ONLINE_PLAYER_NUM", { num: OnlinePlayerNum }); //we should propably make the above to a jsonarray and send this along there
+    socket.emit("PLAYER_ID", {
+      id: id++,
+      name: "Player " + id,
+      num: OnlinePlayerNum
+    });
   });
 
   socket.on("USER_INITIATED", userData => {

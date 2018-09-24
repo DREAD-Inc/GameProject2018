@@ -25,7 +25,12 @@ public class Player : MonoBehaviour
     void Start()
     {
         wh = GetComponent<ModelHandler>();
-        wh.InstantiateWeapon(weapon);
+        InstantiateModels();
+    }
+
+    private void InstantiateModels()
+    {
+        weaponComponent = wh.InstantiateWeapon(weapon);
         wh.InstantiateCharacter(character);
     }
 
@@ -38,8 +43,8 @@ public class Player : MonoBehaviour
         //weapon = pp.weapon;
         //character = pp.character;
 
-        //if (weapon != pp.weapon) { wh.InstantiateWeapon(pp.weapon); weapon = pp.weapon; }
-        //if (character != pp.character) { wh.InstantiateCharacter(pp.character); character = pp.character; }
+        if (weapon != pp.weapon) { weaponComponent = wh.InstantiateWeapon(pp.weapon); weapon = pp.weapon; }
+        if (character != pp.character) { wh.InstantiateCharacter(pp.character); character = pp.character; }
     }
 
     void Update() { }
