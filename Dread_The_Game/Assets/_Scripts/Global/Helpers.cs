@@ -80,7 +80,7 @@ public PlayerParams JSONToPlayerParams (JSONObject data)
         var isShootingString = removeQuotationMark(data.GetField("isShooting").ToString());
 		bool isShooting = isShootingString == "true"? true:false;
 
-		PlayerParams playerParams = new PlayerParams(id,name,position, rotation , new ModelHandler.characters(), new ModelHandler.weapons());
+		PlayerParams playerParams = new PlayerParams(id,name,100f, position, rotation , new ModelHandler.characters(), new ModelHandler.weapons());
 		playerParams.setIsShooting(isShooting);
 		return playerParams; 
 }

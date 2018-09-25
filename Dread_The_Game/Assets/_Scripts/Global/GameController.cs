@@ -54,7 +54,7 @@ public class GameController : MonoBehaviour
         var newP = JsonUtility.FromJson<PlayerParams>(evt.data.ToString());
         if (Dbug) Debug.Log("The Provided id is " + newP.id);
         var character = Instantiate(charPrefab, new Vector3(0, 0f, 0f), Quaternion.Euler(0, -90, 0));
-        PlayerParams playerParams = new PlayerParams(newP.id, newP.name, new Vector3(0, 0f, 0f), Quaternion.Euler(0, 0, 0), new ModelHandler.characters(), new ModelHandler.weapons());
+        PlayerParams playerParams = new PlayerParams(newP.id, newP.name, newP.health, new Vector3(0, 0f, 0f), Quaternion.Euler(0, 0, 0), new ModelHandler.characters(), new ModelHandler.weapons());
         character.GetComponent<Player>().SetFromPlayerParams(playerParams);
         character.GetComponent<Rigidbody>().MovePosition(new Vector3(PlayerNum, 1f, PlayerNum));
         var data = new JSONObject(JsonUtility.ToJson(playerParams));
@@ -129,7 +129,7 @@ public class GameController : MonoBehaviour
         character.GetComponent<Player>().id = id;
         Quaternion rotation = new Quaternion();
         helpers.setQuaternion(ref rotation, 0, -90, 0);
-        PlayerParams playerParams = new PlayerParams(id, "UnNamed", new Vector3(0, 2f, 0f), rotation, new ModelHandler.characters(), new ModelHandler.weapons());
+        PlayerParams playerParams = new PlayerParams(id, "UnNamed", 100f, new Vector3(0, 2f, 0f), rotation, new ModelHandler.characters(), new ModelHandler.weapons());
         var data = helpers.playerParamsToJSON(playerParams);
         socket.Emit("USER_INITIATED", data);
     }

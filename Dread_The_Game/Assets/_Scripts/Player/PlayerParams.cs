@@ -7,17 +7,18 @@ public class PlayerParams
 {
     public int id;
     public string name;
-    public int health;
+    public float health;
     public Vector3 position;
     public Quaternion rotation;
     public ModelHandler.characters character;
     public ModelHandler.weapons weapon;
     public bool isShooting;
 
-    public PlayerParams(int id, string name, Vector3 position, Quaternion rotation, ModelHandler.characters character, ModelHandler.weapons weapon)
+    public PlayerParams(int id, string name, float health, Vector3 position, Quaternion rotation, ModelHandler.characters character, ModelHandler.weapons weapon)
     {
         this.id = id;
         this.name = name;
+        this.health = health;
         this.position = position;
         this.rotation = rotation;
         this.character = character;

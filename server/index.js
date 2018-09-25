@@ -19,7 +19,8 @@ io.on("connection", function(socket) {
     socket.emit("PLAYER_ID", {
       id: id++,
       name: "Player " + id,
-      num: OnlinePlayerNum
+      num: OnlinePlayerNum,
+      health: 100
     });
   });
 

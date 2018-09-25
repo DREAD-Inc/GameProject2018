@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     [Header("Base Stats")]
     public int id;
     public string playerName = "Player"; //+id
-    public float health = 100f;
+    public float health;
 
     [Header("Models")]
     public ModelHandler.weapons weapon = ModelHandler.weapons.LaserGun;
@@ -33,6 +33,15 @@ public class Player : MonoBehaviour
         weaponComponent = wh.InstantiateWeapon(weapon);
         wh.InstantiateCharacter(character);
     }
+
+    public void TakeDamage(float amount){
+
+        health -= amount;
+        if( health > 0) return;
+        health = 0;
+        print(this.name + " has died");
+        //Die()
+        }
 
     public void SetFromPlayerParams(PlayerParams pp)
     {
