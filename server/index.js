@@ -52,16 +52,17 @@ io.on("connection", function(socket) {
   // });
 
   socket.on("CLIENT_MOVE", function(movementData) {
-    var error = true;
+    //var error = true;
     for (var i = 0; i < clients.length; i++)
       if (clients[i].id == movementData.id) {
         clients[i].position = movementData.position;
         clients[i].rotation = movementData.rotation;
-        error = false;
+        socket.broadcast.emit("OTHER_PLAYER_MOVED", movementData);
+        console.log("Client moved: " + movementData.id+ "x: "+ movementData.position.x );
+        return;
+        //error = false;
       }
-    if (error) return;
-    socket.broadcast.emit("OTHER_PLAYER_MOVED", movementData);
-    console.log("Client moved: " + movementData.id);
+    //if (error) return;
   });
 
   // socket.on("disconnect", function(){

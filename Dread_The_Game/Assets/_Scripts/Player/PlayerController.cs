@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
 
         //Increase gravity effect on the player
         rBody.AddForce(Vector3.down * 15f * rBody.mass);
+
         if (moved) gameController.SendClientMovement(player.id, transform.position, transform.rotation);
     }
 

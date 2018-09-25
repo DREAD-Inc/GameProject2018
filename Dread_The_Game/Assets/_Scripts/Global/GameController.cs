@@ -95,16 +95,10 @@ public class GameController : MonoBehaviour
         socket.Emit("CLIENT_MOVE", JSONObject.Create(JsonUtility.ToJson(obj)));
     }
 
-    public PlayerParams GetPlayerParams(int id)
-    {
-        foreach (var p in players)
-            if (p.id == id) return p;
-        return null;
-    }
-
-    public void SetOtherPlayerMove(SocketIOEvent evt)
+    private void SetOtherPlayerMove(SocketIOEvent evt)
     {
         var move = JsonUtility.FromJson<MovementObjJSON>(evt.data.ToString());
+        print("moving player: "+evt.data.ToString());
         foreach (var p in players)
             if (p.id == move.id)
             {
@@ -112,6 +106,15 @@ public class GameController : MonoBehaviour
                 p.rotation = move.rotation;
             }
     }
+
+    public PlayerParams GetPlayerParams(int id)
+    {
+        foreach (var p in players)
+            if (p.id == id) return p;
+        return null;
+    }
+
+
     #endregion
 
 
