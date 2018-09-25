@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     private Camera cam;
     private Player player;
     private Vector3 lastPos;
+    private Quaternion lastRot;
+
 
     public Weapon weapon;
     public GameController gameController;
@@ -34,6 +36,7 @@ public class PlayerController : MonoBehaviour
         player = GetComponent<Player>();
         weapon = player.weaponComponent;
         lastPos = Vector3.zero;
+        //lastRot = Quaternion.Euler(0,-90,0);
     }
 
 
@@ -68,10 +71,6 @@ public class PlayerController : MonoBehaviour
         else if (weapon) weapon.isShooting = false;
 
         if (!weapon) weapon = player.weaponComponent;
-
-        //moved = (horiz > 0 || verti > 0 || horizArrow > 0 || vertiArrow > 0) ? true : false;
-        moved = lastPos == transform.position ? false : true;
-        lastPos = rBody.transform.position;
     }
 
     //Physics are not calculated in sync with the normal update (where input should be collected), it should be handled in FixedUpdate
@@ -85,7 +84,12 @@ public class PlayerController : MonoBehaviour
         //Increase gravity effect on the player
         rBody.AddForce(Vector3.down * 15f * rBody.mass);
 
-        if (moved) gameController.SendClientMovement(player.id, transform.position, transform.rotation);
+        if (lastPos != transform.position || lastRot != transform.rotation)
+        {
+            gameController.SendClientMovement(player.id, transform.position, transform.rotation);
+            lastPos = transform.position;
+            lastRot = transform.rotation;
+        }
     }
 
     private void UpdateSettings()
@@ -122,7 +126,6 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        print("jump");
         rBody.AddForce(Vector3.up * Mathf.Sqrt(jumpDistance * -2f * Physics.gravity.y), ForceMode.VelocityChange);
         onGround = false;
         doJump = false;

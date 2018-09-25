@@ -65,7 +65,7 @@ public class GameController : MonoBehaviour
     {
         if (Dbug) print("Adding new player");
         PlayerParams pp = PlayerParams.CreateFromJSON(evt.data.ToString());
-        var newCharacter = Instantiate(otherCharPrefab, pp.getPosition(), Quaternion.Euler(pp.getRotation().x, pp.getRotation().y, pp.getRotation().z));
+        var newCharacter = Instantiate(otherCharPrefab, pp.getPosition(), Quaternion.Euler(0, -90, 0));
         newCharacter.GetComponent<Player>().id = pp.id;
         players.Add(pp);
     }
