@@ -22,9 +22,12 @@ public class Player : MonoBehaviour
     public float dashDistance = 7f;
 
     private ModelHandler wh;
+    private GameController gameController;
     void Start()
     {
         wh = GetComponent<ModelHandler>();
+        gameController = GameObject.FindGameObjectWithTag("Global").GetComponent<GameController>();
+
         InstantiateModels();
     }
 
@@ -34,14 +37,17 @@ public class Player : MonoBehaviour
         wh.InstantiateCharacter(character);
     }
 
-    public void TakeDamage(float amount){
+    public void TakeDamage(float amount)
+    {
 
         health -= amount;
-        if( health > 0) return;
+                gameController.SendClientHealth(id, health);
+
+        if (health > 0) return;
         health = 0;
         print(this.name + " has died");
         //Die()
-        }
+    }
 
     public void SetFromPlayerParams(PlayerParams pp)
     {

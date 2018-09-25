@@ -95,6 +95,12 @@ public class GameController : MonoBehaviour
         socket.Emit("CLIENT_MOVE", JSONObject.Create(JsonUtility.ToJson(obj)));
     }
 
+    public void SendClientHealth(int id, float health){
+        var obj = new HealthObjJSON(id,health);
+        socket.Emit("CLIENT_UPDATE_HEALTH", JSONObject.Create(JsonUtility.ToJson(obj)));
+
+    }
+
     private void SetOtherPlayerMove(SocketIOEvent evt)
     {
         var move = JsonUtility.FromJson<MovementObjJSON>(evt.data.ToString());

@@ -53,7 +53,6 @@ io.on("connection", function(socket) {
   // });
 
   socket.on("CLIENT_MOVE", function(movementData) {
-    //var error = true;
     for (var i = 0; i < clients.length; i++)
       if (clients[i].id == movementData.id) {
         clients[i].position = movementData.position;
@@ -61,9 +60,11 @@ io.on("connection", function(socket) {
         socket.broadcast.emit("OTHER_PLAYER_MOVED", movementData);
         //console.log("Client moved: " + movementData.id+ " x: "+ movementData.position.x );
         return;
-        //error = false;
       }
-    //if (error) return;
+  });
+
+  socket.on("CLIENT_UPDATE_HEALTH", function(healthData) {
+    console.log(healthData);
   });
 
   // socket.on("disconnect", function(){

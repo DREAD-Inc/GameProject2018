@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/* This file handles movement and physics for the player. */
+/* This file handles movement and physics for the player. TODO refactor such that only movement is handled in this file*/
 public class PlayerController : MonoBehaviour
 {
     public float smoothSpeed = 10f;

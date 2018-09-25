@@ -17,10 +17,6 @@ public class LaserProjectile : MonoBehaviour
 
     }
 
-    // private void OnTriggerEnter(Collider other)
-    // {
-    //         Debug.Log("entered");     
-    // }
     private void OnTriggerStay(Collider other)
     {
         print("Lasering " + other.transform.parent.parent.name);
