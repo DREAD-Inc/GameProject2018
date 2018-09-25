@@ -53,10 +53,10 @@ public class GameController : MonoBehaviour
         SetPlayerNum(evt);
         var newP = JsonUtility.FromJson<PlayerParams>(evt.data.ToString());
         if (Dbug) Debug.Log("The Provided id is " + newP.id + " numPlayers: " + PlayerNum);
-        var character = Instantiate(charPrefab, new Vector3(0, 2f, 0f), Quaternion.Euler(0, -90, 0));
-        PlayerParams playerParams = new PlayerParams(newP.id, newP.name, new Vector3(0, 2f, 0f), Quaternion.Euler(0, -90, 0), new ModelHandler.characters(), new ModelHandler.weapons());
+        var character = Instantiate(charPrefab, new Vector3(0, 0f, 0f), Quaternion.Euler(0, -90, 0));
+        PlayerParams playerParams = new PlayerParams(newP.id, newP.name, new Vector3(0, 0f, 0f), Quaternion.Euler(0, 0, 0), new ModelHandler.characters(), new ModelHandler.weapons());
         character.GetComponent<Player>().SetFromPlayerParams(playerParams);
-        character.GetComponent<Rigidbody>().MovePosition(new Vector3(PlayerNum, 2f, PlayerNum));
+        character.GetComponent<Rigidbody>().MovePosition(new Vector3(PlayerNum, 1f, PlayerNum));
         var data = new JSONObject(JsonUtility.ToJson(playerParams));
         socket.Emit("USER_INITIATED", data);
     }
@@ -75,7 +75,7 @@ public class GameController : MonoBehaviour
     {
         PlayerParams pp = PlayerParams.CreateFromJSON(evt.data.ToString());
         if (Dbug) print("Existing player: " + evt.data.ToString());
-        var newCharacter = Instantiate(otherCharPrefab);
+        var newCharacter = Instantiate(otherCharPrefab, new Vector3(0, 0f, 0f), Quaternion.Euler(0, -90, 0));
         Player player = newCharacter.GetComponent<Player>();
         player.SetFromPlayerParams(pp);
         players.Add(pp);
