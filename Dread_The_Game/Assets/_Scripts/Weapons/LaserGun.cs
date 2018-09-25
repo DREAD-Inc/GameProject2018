@@ -19,5 +19,7 @@ public class LaserGun : Weapon
     protected override void Shoot()
     {
         projectile.gameObject.SetActive(true);
+        var a = projectile.GetComponent<Collider>();
+        //a
     }
 }

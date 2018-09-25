@@ -58,7 +58,7 @@ io.on("connection", function(socket) {
         clients[i].position = movementData.position;
         clients[i].rotation = movementData.rotation;
         socket.broadcast.emit("OTHER_PLAYER_MOVED", movementData);
-        console.log("Client moved: " + movementData.id+ "x: "+ movementData.position.x );
+        //console.log("Client moved: " + movementData.id+ " x: "+ movementData.position.x );
         return;
         //error = false;
       }
