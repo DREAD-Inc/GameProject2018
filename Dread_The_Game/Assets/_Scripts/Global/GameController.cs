@@ -12,7 +12,9 @@ public class GameController : MonoBehaviour
     private GameObject charPrefab;
     private GameObject otherCharPrefab;
     private GameObject mapPrefab;
-    public List<PlayerParams> playerList;
+    private List<PlayerParams> players;
+    //public List<PlayerParams> playersSyncInfo;
+
     private Helpers helpers;
 
     public bool Dbug = true;
@@ -21,7 +23,7 @@ public class GameController : MonoBehaviour
     void Start()
     {
         socket = GetComponent<SocketIOComponent>();
-        playerList = new List<PlayerParams>();
+        players = new List<PlayerParams>();
         helpers = new Helpers();
 
         //We need to wait for few ms before emiting
@@ -45,7 +47,7 @@ public class GameController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         socket.Emit("USER_CONNECT");
     }
-    /* --------------- Connection --------------- */
+    #region Connection 
     private void InstantiatePlayer(SocketIOEvent evt)
     {
         SetPlayerNum(evt);
@@ -65,8 +67,7 @@ public class GameController : MonoBehaviour
         PlayerParams pp = PlayerParams.CreateFromJSON(evt.data.ToString());
         var newCharacter = Instantiate(otherCharPrefab, pp.getPosition(), Quaternion.Euler(pp.getRotation().x, pp.getRotation().y, pp.getRotation().z));
         newCharacter.GetComponent<Player>().id = pp.id;
-
-        playerList.Add(pp);
+        players.Add(pp);
     }
 
 
@@ -77,8 +78,7 @@ public class GameController : MonoBehaviour
         var newCharacter = Instantiate(otherCharPrefab);
         Player player = newCharacter.GetComponent<Player>();
         player.SetFromPlayerParams(pp);
-        player.transform.position = pp.position;
-        playerList.Add(pp);
+        players.Add(pp);
     }
 
     private void SetPlayerNum(SocketIOEvent evt)
@@ -86,16 +86,34 @@ public class GameController : MonoBehaviour
         PlayerNum = Int32.Parse(evt.data.GetField("num").ToString());
         if (Dbug) print("Online players: " + PlayerNum);
     }
+    #endregion
 
-    /* --------------- Movement / Actions --------------- */
-
+    #region Movement / Actions 
     public void SendClientMovement(int id, Vector3 pos, Quaternion rot)
     {
-        var obj = new MovementObj(id, pos, rot);
-        //print(JsonUtility.ToJson(obj));
+        var obj = new MovementObjJSON(id, pos, rot);
         socket.Emit("CLIENT_MOVE", JSONObject.Create(JsonUtility.ToJson(obj)));
     }
 
+    public PlayerParams GetPlayerParams(int id)
+    {
+        foreach (var p in players)
+            if (p.id == id) return p;
+        return null;
+
+    }
+
+    // void UpdateOtherPlayerMovement()
+    // {
+    //     for (int i = 0; i < playersSyncInfo.Count; i++)
+    //     {
+    //         var p = players[playersSyncInfo[i].id];
+    //         p.transform.position = playersSyncInfo[i].position;
+    //         p.transform.rotation = playersSyncInfo[i].rotation;
+
+    //     }
+    // }
+    #endregion
 
 
 
@@ -121,7 +139,7 @@ public class GameController : MonoBehaviour
         Instantiate(newCharPrefab, newPlayerParams.getPosition(), Quaternion.Euler(newPlayerParams.getRotation().x, newPlayerParams.getRotation().y, newPlayerParams.getRotation().z));
         newCharPrefab.GetComponent<Player>().id = newPlayerParams.getId(); // we need to access the instatiated gameobject instead of the prefab/template var x = Instantiate(y); 
         if (Dbug) Debug.Log(newPlayerParams.getPosition());
-        playerList.Add(newPlayerParams);
+        //players.Add(newPlayerParams);
 
     }
     private void addExistingPlayer(SocketIOEvent evt)
@@ -131,21 +149,7 @@ public class GameController : MonoBehaviour
         GameObject newCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject)); ;
         Instantiate(newCharPrefab, newPlayerParams.getPosition(), Quaternion.Euler(newPlayerParams.getRotation().x, newPlayerParams.getRotation().y, newPlayerParams.getRotation().z));
         newCharPrefab.GetComponent<Player>().id = newPlayerParams.getId();
-        playerList.Add(newPlayerParams);
+        //players.Add(newPlayerParams);
     }
 }
 
-[System.Serializable]
-public class MovementObj
-{
-    public int id;
-    public Vector3 position;
-    public Quaternion rotation;
-
-    public MovementObj(int id, Vector3 pos, Quaternion rot)
-    {
-        this.id = id;
-        this.position = pos;
-        this.rotation = rot;
-    }
-}

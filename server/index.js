@@ -25,11 +25,11 @@ io.on("connection", function(socket) {
 
   socket.on("USER_INITIATED", userData => {
     clients.forEach(player => {
-      console.log(player);
+      console.log("Sending to client: " + player);
       socket.emit("GET_EXISTING_PLAYER", player);
     });
     clients.push(userData);
-    console.log("userData" + userData);
+    //console.log("userData" + userData);
     socket.broadcast.emit("A_USER_INITIATED", userData);
   });
 
@@ -52,13 +52,12 @@ io.on("connection", function(socket) {
   // });
 
   socket.on("CLIENT_MOVE", function(movementData) {
-    /*console.log(movementData);
-    var data = JSON.parse(movementData);
     for (var i = 0; i < clients.length; i++)
-      if (clients[i].id == data.id) {
-        clients[i].position = data.position;
-        clients[i].rotation = data.rotation;
-      }*/
+      if (clients[i].id == movementData.id) {
+        console.log(clients[i]);
+        clients[i].position = movementData.position;
+        clients[i].rotation = movementData.rotation;
+      }
   });
 
   // socket.on("disconnect", function(){

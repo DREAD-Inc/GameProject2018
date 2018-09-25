@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rBody;
     private Camera cam;
     private Player player;
+    private Vector3 lastPos;
 
     public Weapon weapon;
     public GameController gameController;
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour
         rBody.drag = 4; // Used for dash. Change dashDistance in char attributes instead
         player = GetComponent<Player>();
         weapon = player.weaponComponent;
+        lastPos = Vector3.zero;
     }
 
 
@@ -67,7 +69,9 @@ public class PlayerController : MonoBehaviour
 
         if (!weapon) weapon = player.weaponComponent;
 
-        moved = (horiz > 0 || verti > 0 || horizArrow > 0 || vertiArrow > 0) ? true : false;
+        //moved = (horiz > 0 || verti > 0 || horizArrow > 0 || vertiArrow > 0) ? true : false;
+        moved = lastPos == transform.position ? false : true;
+        lastPos = rBody.transform.position;
     }
 
     //Physics are not calculated in sync with the normal update (where input should be collected), it should be handled in FixedUpdate

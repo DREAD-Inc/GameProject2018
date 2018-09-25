@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 114663510374864986}
   - component: {fileID: 54035206360097364}
   m_Layer: 0
-  m_Name: OtherPlayer
+  m_Name: OtherPlayer_2
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -127,6 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef719befc2807384f81ec7ecccba2993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 0
   playerName: Player
   health: 100
   weapon: 0
