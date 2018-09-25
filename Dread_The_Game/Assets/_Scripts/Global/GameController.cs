@@ -32,7 +32,7 @@ public class GameController : MonoBehaviour
         socket.On("PLAYER_ID", InstantiatePlayer); //Called when initiating the client
         socket.On("A_USER_INITIATED", AddNewPlayer); //Called when a new player joins after this client
         socket.On("GET_EXISTING_PLAYER", AddExistingPlayer); //Spawns all players that were already in the game
-        //socket.On("ONLINE_PLAYER_NUM", SetPlayerNum); 
+        socket.On("OTHER_PLAYER_MOVED", SetOtherPlayerMove);
 
         charPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/Player", typeof(GameObject));
         otherCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject));
@@ -52,7 +52,7 @@ public class GameController : MonoBehaviour
     {
         SetPlayerNum(evt);
         var newP = JsonUtility.FromJson<PlayerParams>(evt.data.ToString());
-        if (Dbug) Debug.Log("The Provided id is " + newP.id + " numPlayers: " + PlayerNum);
+        if (Dbug) Debug.Log("The Provided id is " + newP.id);
         var character = Instantiate(charPrefab, new Vector3(0, 0f, 0f), Quaternion.Euler(0, -90, 0));
         PlayerParams playerParams = new PlayerParams(newP.id, newP.name, new Vector3(0, 0f, 0f), Quaternion.Euler(0, 0, 0), new ModelHandler.characters(), new ModelHandler.weapons());
         character.GetComponent<Player>().SetFromPlayerParams(playerParams);
@@ -100,19 +100,18 @@ public class GameController : MonoBehaviour
         foreach (var p in players)
             if (p.id == id) return p;
         return null;
-
     }
 
-    // void UpdateOtherPlayerMovement()
-    // {
-    //     for (int i = 0; i < playersSyncInfo.Count; i++)
-    //     {
-    //         var p = players[playersSyncInfo[i].id];
-    //         p.transform.position = playersSyncInfo[i].position;
-    //         p.transform.rotation = playersSyncInfo[i].rotation;
-
-    //     }
-    // }
+    public void SetOtherPlayerMove(SocketIOEvent evt)
+    {
+        var move = JsonUtility.FromJson<MovementObjJSON>(evt.data.ToString());
+        foreach (var p in players)
+            if (p.id == move.id)
+            {
+                p.position = move.position;
+                p.rotation = move.rotation;
+            }
+    }
     #endregion
 
 

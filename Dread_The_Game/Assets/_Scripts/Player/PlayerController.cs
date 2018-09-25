@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
         UpdateSettings();
 
         //Check if onGround (alternative way of setting onGround that avoids "rocket jump" bug caused by OnCollisionEnter beeing called many times when next to a surface)
-        onGround = Physics.CheckSphere(groundChecker.position, .1f, ground, QueryTriggerInteraction.Ignore);
+        onGround = Physics.CheckSphere(groundChecker.position, .5f, ground, QueryTriggerInteraction.Ignore);
 
         //Collect input from WASD and the arrowkeys
         float horiz, horizArrow, verti, vertiArrow;
@@ -121,6 +121,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
+        print("jump");
         rBody.AddForce(Vector3.up * Mathf.Sqrt(jumpDistance * -2f * Physics.gravity.y), ForceMode.VelocityChange);
         onGround = false;
         doJump = false;
