@@ -41,11 +41,12 @@ public class Player : MonoBehaviour
     {
 
         health -= amount;
-                gameController.SendClientHealth(id, health);
-
-        if (health > 0) return;
-        health = 0;
-        print(this.name + " has died");
+        if (health > 0) gameController.SendClientHealth(id, health);
+        else
+        {
+            health = 0;
+            print(this.name + " has died");
+        }
         //Die()
     }
 

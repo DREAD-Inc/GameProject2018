@@ -10,11 +10,11 @@ var clients = [];
 var id = 0;
 var OnlinePlayerNum = 0;
 
-io.on("connection", function(socket) {
+io.on("connection", function (socket) {
   //var currentUser;
   var AllReadyOnline = [];
 
-  socket.on("USER_CONNECT", function() {
+  socket.on("USER_CONNECT", function () {
     OnlinePlayerNum++;
     socket.emit("PLAYER_ID", {
       id: id++,
@@ -52,7 +52,7 @@ io.on("connection", function(socket) {
 
   // });
 
-  socket.on("CLIENT_MOVE", function(movementData) {
+  socket.on("CLIENT_MOVE", function (movementData) {
     for (var i = 0; i < clients.length; i++)
       if (clients[i].id == movementData.id) {
         clients[i].position = movementData.position;
@@ -63,7 +63,13 @@ io.on("connection", function(socket) {
       }
   });
 
-  socket.on("CLIENT_UPDATE_HEALTH", function(healthData) {
+  socket.on("CLIENT_UPDATE_HEALTH", function (healthData) {
+    for (var i = 0; i < clients.length; i++)
+      if (clients[i].id == healthData.id) {
+        clients[i].health = healthData.health;
+        socket.broadcast.emit("OTHER_PLAYER_HEALTHCHANGE", healthData);
+        return;
+      }
     console.log(healthData);
   });
 
@@ -78,6 +84,6 @@ io.on("connection", function(socket) {
   // });
 });
 
-server.listen(app.get("port"), function() {
+server.listen(app.get("port"), function () {
   console.log("---SERVER IS RUNNING AT " + app.get("port") + "---");
 });
