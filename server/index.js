@@ -14,6 +14,8 @@ var OnlinePlayerNum = 0;
 var movements = 0;
 var healthChanges = 0;
 var lastMoves, lastHealths, lastOnline;
+
+var spawnPositionsA = [{ x: -42, y: 2, z: -42 }];
 setInterval(function() {
   if (
     movements != lastMoves ||
@@ -83,10 +85,25 @@ io.on("connection", function(socket) {
     for (var i = 0; i < clients.length; i++)
       if (clients[i].id == healthData.id) {
         clients[i].health += healthData.health;
+        /*if (clients[i].health <= 0) {
+          io.emit("PLAYER_DEAD", { id: healthData.id });
+          //clients.slice(clients[i]);
+        } else {*/
         healthData.health = clients[i].health;
         io.emit("PLAYER_HEALTHCHANGE", healthData);
+        //}
         return;
       }
+  });
+
+  socket.on("PLAYER_DEAD", function(data) {
+    //console.log("length: " + clients.length);
+    for (var i = 0; i < clients.length; i++)
+      if (clients[i].id == data) clients.splice(i, 1);
+    //console.log("length: " + clients.length);
+
+    console.log("- remove and broadcast player dead ID: " + data + "\r\n");
+    socket.broadcast.emit("OTHER_PLAYER_DEAD", { id: data });
   });
 
   // socket.on("REPLAY_TO_CONNECT",(userData)=>{
@@ -123,7 +140,7 @@ server.listen(app.get("port"), function() {
 });
 
 String.prototype.toHHMMSS = function() {
-  var sec_num = parseInt(this, 10); // don't forget the second param
+  var sec_num = parseInt(this, 10);
   var hours = Math.floor(sec_num / 3600);
   var minutes = Math.floor((sec_num - hours * 3600) / 60);
   var seconds = sec_num - hours * 3600 - minutes * 60;

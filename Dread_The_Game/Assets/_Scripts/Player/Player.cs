@@ -41,15 +41,6 @@ public class Player : MonoBehaviour
     public void TakeDamage(float amount)
     {
         gameController.SendPlayerHealth(id, amount);
-        /*
-        health -= amount;
-        if (health > 0) gameController.SendPlayerHealth(id, health);
-        else
-        {
-            health = 0;
-            print(this.name + " has died");
-        }
-        //Die()*/
     }
 
     public void SetFromPlayerParams(PlayerParams pp)

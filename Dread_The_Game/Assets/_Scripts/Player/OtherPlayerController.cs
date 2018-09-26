@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class OtherPlayerController : MonoBehaviour
 {
 
@@ -13,8 +13,8 @@ public class OtherPlayerController : MonoBehaviour
     private Vector3 rotation;
     private ModelHandler.characters character;
     private ModelHandler.weapons weapon;
-    private bool isShooting; //we could find a different way to sync shooting, but i think this would work well for main weapons (if that doesn't include grenades etc(stuff that needs physics))
-
+    private bool isShooting, doDie, dying; //we could find a different way to sync shooting, but i think this would work well for main weapons (if that doesn't include grenades etc(stuff that needs physics))
+    public Image healthBar;
     private Vector3 lastpos = Vector3.zero;
     private Player player;
     void Start()
@@ -27,6 +27,14 @@ public class OtherPlayerController : MonoBehaviour
 
     void Update()
     {
+        if (doDie && !dying)
+        {
+            var coroutine = TimedDestroy(5.0f);
+            StartCoroutine(coroutine);
+            dying = true;
+        }
+        healthBar.fillAmount = player.health / 100;
+
         var pp = gameController.GetPlayerParams(id);
         if (pp == null) return;
         if (pp.position != lastpos)
@@ -35,6 +43,17 @@ public class OtherPlayerController : MonoBehaviour
             transform.rotation = pp.rotation;
             lastpos = transform.position;
             //print(id + ": " + pp.position);
+        }
+    }
+    public void Die() { doDie = true; }
+
+    public IEnumerator TimedDestroy(float wait)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(wait);
+            print("destroying " + id);
+            Destroy(gameObject); //destroy controller only
         }
     }
 }

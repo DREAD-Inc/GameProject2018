@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     //Setting and Input variables
     private float speed, jumpDistance, dashDistance;
     private Vector3 input, inputArrow, velocity, forward;
-    private bool onGround, doDash, doJump, isShooting, moved;
+    private bool onGround, doDash, doDie, doJump, isShooting, moved, dying;
 
     //Game Objects etc.
     private Transform groundChecker;
@@ -32,15 +32,18 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        //setup gameobjects/components
         groundChecker = transform.Find("GroundChecker");
         gameController = GameObject.FindGameObjectWithTag("Global").GetComponent<GameController>();
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         cam.GetComponent<FollowCam>().target = transform.Find("FollowTarget");
+
         rBody = GetComponent<Rigidbody>();
-        rBody.drag = 4; // Used for dash. Change dashDistance in char attributes instead
+        rBody.drag = 4; // Used for dash. Change dashDistance in char attributes instead        
         player = GetComponent<Player>();
         weapon = player.weaponComponent;
         lastPos = Vector3.zero;
+
         healthBar = GameObject.FindGameObjectWithTag("ClientHealthBar").GetComponent<Slider>();
         healthBar.value = player.health;
         healthBarText = GameObject.FindGameObjectWithTag("ClientHealthBar").GetComponentInChildren<Text>();
@@ -51,6 +54,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (dying || checkIfDead()) return;
         //Collect settings from CharacterAttributes
         UpdateSettings();
 
@@ -85,13 +89,20 @@ public class PlayerController : MonoBehaviour
         healthBar.value = player.health;
         healthBarText.text = player.health + " / " + player.maxHealth;
 
+        //avoid unintentional rotation due to physics calculations
+        moved = input != Vector3.zero || inputArrow != Vector3.zero || Input.GetButton("Fire1") ? true : false;
+        if (moved) rBody.constraints = RigidbodyConstraints.None | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        else rBody.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
     //Physics are not calculated in sync with the normal update (where input should be collected), it should be handled in FixedUpdate
     void FixedUpdate()
     {
+        //if (dying) return;
+
         if (onGround && doJump) Jump();
         if (doDash) Dash();
+        if (doDie && !dying) Die();
         //Move the character
         rBody.MovePosition(rBody.position + input * speed * Time.fixedDeltaTime);
 
@@ -104,11 +115,6 @@ public class PlayerController : MonoBehaviour
             lastPos = transform.position;
             lastRot = transform.rotation;
         }
-    }
-
-    void UpdateHealthBar()
-    {
-
     }
 
     private void UpdateSettings()
@@ -149,4 +155,39 @@ public class PlayerController : MonoBehaviour
         onGround = false;
         doJump = false;
     }
+    private void Die()
+    {
+        //Change to the "Die" animation of a character when we have one
+        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        rBody.AddForce(new Vector3(Random.Range(-.3f, .3f), 1, Random.Range(-.3f, .3f)) * Mathf.Sqrt(jumpDistance * -2f * Physics.gravity.y), ForceMode.Acceleration);
+        onGround = false;
+        dying = true;
+        var coroutine = TimedDestroy(5.0f);
+        StartCoroutine(coroutine);
+    }
+    public IEnumerator TimedDestroy(float wait)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(wait);
+            print("sending dead player: " + player.id);
+            gameController.SendPlayerDead(player.id);
+            Destroy(this);
+        }
+    }
+
+    public bool checkIfDead()
+    {
+        if (player.health <= 0)
+        {
+            doDie = true;
+            return true;
+        }
+        return false;
+    }
+    public void setDoJump()
+    {
+        doDie = true;
+    }
+
 }

@@ -36,12 +36,14 @@ public class GameController : MonoBehaviour
         socket.On("GET_EXISTING_PLAYER", AddExistingPlayer); //Spawns all players that were already in the game
         socket.On("OTHER_PLAYER_MOVED", SetOtherPlayerMove);
         socket.On("PLAYER_HEALTHCHANGE", SetPlayerHealthChange);
+        socket.On("OTHER_PLAYER_DEAD", DestroyDeadPlayer);
+
 
         charPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/Player", typeof(GameObject));
         otherCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject));
         mapPrefab = (GameObject)Resources.Load("Prefabs/Maps/TestMap", typeof(GameObject));
 
-        Instantiate(mapPrefab);
+        //Instantiate(mapPrefab);
     }
 
     void Update() { }
@@ -107,6 +109,11 @@ public class GameController : MonoBehaviour
         socket.Emit("UPDATE_HEALTH", JSONObject.Create(JsonUtility.ToJson(obj)));
 
     }
+    public void SendPlayerDead(int id)
+    {
+        socket.Emit("PLAYER_DEAD", JSONObject.Create(id));
+
+    }
 
     private void SetOtherPlayerMove(SocketIOEvent evt)
     {
@@ -132,6 +139,19 @@ public class GameController : MonoBehaviour
             if (p.GetComponent<Player>().id == healthChange.id)
             {
                 p.GetComponent<Player>().health = healthChange.health;
+            }
+    }
+
+    private void DestroyDeadPlayer(SocketIOEvent evt)
+    {
+        var id = Int32.Parse(evt.data.GetField("id").ToString());
+        print("killing " + id);
+        foreach (var p in playerObjects)
+            if (p.GetComponent<Player>().id == id)
+            {
+                print("other player dead: " + id);
+                p.GetComponent<OtherPlayerController>().Die();
+                return;
             }
     }
 
