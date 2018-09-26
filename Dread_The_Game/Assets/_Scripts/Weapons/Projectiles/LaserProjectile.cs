@@ -33,10 +33,10 @@ public class LaserProjectile : MonoBehaviour
             line.SetPosition(1, new Vector3(0, 0, distance));
 
         //Deal damage to other player
-        if (other.gameObject.tag == "OtherPlayer") //the part of the character containing the hit collider
+        if (other.gameObject.tag == "OtherPlayer") //the part of the character model containing the collider should have this tag
         {
             var hitPlayer = other.transform.parent.parent.GetComponent<Player>();
-            print("Lasering " + hitPlayer.name);
+            //print("Lasering " + hitPlayer.name);
             hitPlayer.GetComponent<Player>().TakeDamage(2f * Time.deltaTime * 10);
         }
     }

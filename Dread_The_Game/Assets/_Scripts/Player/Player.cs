@@ -56,8 +56,6 @@ public class Player : MonoBehaviour
         name = pp.name;
         playerName = pp.name;
         health = pp.health;
-        //weapon = pp.weapon;
-        //character = pp.character;
         //gameObject.transform.position = pp.position;
 
         if (weapon != pp.weapon) { weaponComponent = wh.InstantiateWeapon(pp.weapon); weapon = pp.weapon; }

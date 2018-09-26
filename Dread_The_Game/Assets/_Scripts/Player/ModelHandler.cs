@@ -9,14 +9,7 @@ public class ModelHandler : MonoBehaviour
     public enum weapons { LaserGun, FireThrower }
     public enum characters { CapsuleBot }
 
-
-    //private weapons currentWeapon = weapons.LaserGun;
-    //private characters currentCharacter = characters.CapsuleBot;
-
     private GameObject prefab;
-
-    void Start() { }
-    void Update() { }
 
     public Weapon InstantiateWeapon(weapons weapon)
     {

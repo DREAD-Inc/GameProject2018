@@ -10,11 +10,38 @@ var clients = [];
 var id = 0;
 var OnlinePlayerNum = 0;
 
+//For optimisation / debugging
+var movements = 0;
+var healthChanges = 0;
+var lastMoves, lastHealths, lastOnline;
+setInterval(function() {
+  if (
+    movements != lastMoves ||
+    healthChanges != lastHealths ||
+    OnlinePlayerNum != lastOnline
+  ) {
+    lastMoves = movements;
+    lastHealths = healthChanges;
+    lastOnline = OnlinePlayerNum;
+    return console.log(
+      "Players Online: " + OnlinePlayerNum,
+      " Server Uptime: " +
+        process
+          .uptime()
+          .toString()
+          .toHHMMSS(),
+      "\r\nMovements: " + movements,
+      " | Health Updates: " + healthChanges,
+      "\r\n"
+    );
+  }
+}, 10000);
+
 io.on("connection", function(socket) {
   //var currentUser;
   //var AllReadyOnline = [];
 
-  /* ----- Connection ----- */
+  /* --------------- Connection --------------- */
   socket.on("USER_CONNECT", function() {
     OnlinePlayerNum++;
     id++;
@@ -35,11 +62,12 @@ io.on("connection", function(socket) {
     console.log("- sending already online player data to id: " + userData.id);
 
     socket.broadcast.emit("A_USER_INITIATED", userData);
-    console.log("- broadcasting new player data");
+    console.log("- broadcasting new player data \r\n");
   });
 
-  /* ----- Actions ----- */
+  /* --------------- Actions --------------- */
   socket.on("CLIENT_MOVE", function(movementData) {
+    movements++;
     for (var i = 0; i < clients.length; i++)
       if (clients[i].id == movementData.id) {
         clients[i].position = movementData.position;
@@ -51,6 +79,7 @@ io.on("connection", function(socket) {
   });
 
   socket.on("CLIENT_UPDATE_HEALTH", function(healthData) {
+    healthChanges++;
     for (var i = 0; i < clients.length; i++)
       if (clients[i].id == healthData.id) {
         clients[i].health = healthData.health;
@@ -89,5 +118,23 @@ io.on("connection", function(socket) {
 });
 
 server.listen(app.get("port"), function() {
-  console.log("---SERVER IS RUNNING AT " + app.get("port") + "---");
+  console.log("---SERVER IS RUNNING AT " + app.get("port") + "--- \r\n");
 });
+
+String.prototype.toHHMMSS = function() {
+  var sec_num = parseInt(this, 10); // don't forget the second param
+  var hours = Math.floor(sec_num / 3600);
+  var minutes = Math.floor((sec_num - hours * 3600) / 60);
+  var seconds = sec_num - hours * 3600 - minutes * 60;
+
+  if (hours < 10) {
+    hours = "0" + hours;
+  }
+  if (minutes < 10) {
+    minutes = "0" + minutes;
+  }
+  if (seconds < 10) {
+    seconds = "0" + seconds;
+  }
+  return hours + ":" + minutes + ":" + seconds;
+};

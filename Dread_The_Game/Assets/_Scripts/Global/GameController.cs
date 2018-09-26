@@ -88,7 +88,7 @@ public class GameController : MonoBehaviour
 
     }
 
-    private void SetPlayerNum(SocketIOEvent evt) { PlayerNum = Int32.Parse(evt.data.GetField("num").ToString()); }
+    private void SetPlayerNum(SocketIOEvent evt) { PlayerNum = Int32.Parse(evt.data.GetField("num").ToString()); } //Used for selecting a spawn posistion
     #endregion
 
     #region Movement / Actions 
