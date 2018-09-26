@@ -30,7 +30,7 @@ public class GameController : MonoBehaviour
         //We need to wait for few ms before emiting
         StartCoroutine(ConnectToServer());
 
-        socket.On("PLAYER_ID", InstantiatePlayer); //Called when initiating the client
+        socket.On("PLAYER_ID", InstantiatePlayer); //Called when instantiating the client
         socket.On("A_USER_INITIATED", AddNewPlayer); //Called when a new player joins after this client
         socket.On("GET_EXISTING_PLAYER", AddExistingPlayer); //Spawns all players that were already in the game
         socket.On("OTHER_PLAYER_MOVED", SetOtherPlayerMove);
@@ -44,13 +44,15 @@ public class GameController : MonoBehaviour
     }
 
     void Update() { }
+
+    #region Connection 
     IEnumerator ConnectToServer()
     {
         yield return new WaitForSeconds(0.5f);
         socket.Emit("USER_CONNECT");
     }
-    #region Connection 
-    private void InstantiatePlayer(SocketIOEvent evt)
+
+    private void InstantiatePlayer(SocketIOEvent evt) //Instantiate this client
     {
         SetPlayerNum(evt);
         var newP = JsonUtility.FromJson<PlayerParams>(evt.data.ToString());
@@ -63,7 +65,7 @@ public class GameController : MonoBehaviour
         socket.Emit("USER_INITIATED", data);
     }
 
-    private void AddNewPlayer(SocketIOEvent evt)
+    private void AddNewPlayer(SocketIOEvent evt) //Add each player that joins after this client
     {
         if (Dbug) print("Adding new player");
         PlayerParams pp = PlayerParams.CreateFromJSON(evt.data.ToString());
@@ -74,7 +76,7 @@ public class GameController : MonoBehaviour
     }
 
 
-    private void AddExistingPlayer(SocketIOEvent evt)
+    private void AddExistingPlayer(SocketIOEvent evt) //Add players that joined before this client
     {
         PlayerParams pp = PlayerParams.CreateFromJSON(evt.data.ToString());
         if (Dbug) print("Existing player: " + evt.data.ToString());
@@ -82,18 +84,15 @@ public class GameController : MonoBehaviour
         Player player = newCharacter.GetComponent<Player>();
         player.SetFromPlayerParams(pp);
         players.Add(pp);
-                playerObjects.Add(newCharacter);
+        playerObjects.Add(newCharacter);
 
     }
 
-    private void SetPlayerNum(SocketIOEvent evt)
-    {
-        PlayerNum = Int32.Parse(evt.data.GetField("num").ToString());
-        if (Dbug) print("Online players: " + PlayerNum);
-    }
+    private void SetPlayerNum(SocketIOEvent evt) { PlayerNum = Int32.Parse(evt.data.GetField("num").ToString()); }
     #endregion
 
     #region Movement / Actions 
+
     public void SendClientMovement(int id, Vector3 pos, Quaternion rot)
     {
         var obj = new MovementObjJSON(id, pos, rot);
@@ -110,7 +109,7 @@ public class GameController : MonoBehaviour
     private void SetOtherPlayerMove(SocketIOEvent evt)
     {
         var move = JsonUtility.FromJson<MovementObjJSON>(evt.data.ToString());
-        print("moving player: " + evt.data.ToString());
+        //print("moving player: " + evt.data.ToString());
         foreach (var p in players)
             if (p.id == move.id)
             {
@@ -135,8 +134,6 @@ public class GameController : MonoBehaviour
             if (p.id == id) return p;
         return null;
     }
-
-
     #endregion
 
 

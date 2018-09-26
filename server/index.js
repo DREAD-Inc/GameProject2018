@@ -10,28 +10,53 @@ var clients = [];
 var id = 0;
 var OnlinePlayerNum = 0;
 
-io.on("connection", function (socket) {
+io.on("connection", function(socket) {
   //var currentUser;
-  var AllReadyOnline = [];
+  //var AllReadyOnline = [];
 
-  socket.on("USER_CONNECT", function () {
+  /* ----- Connection ----- */
+  socket.on("USER_CONNECT", function() {
     OnlinePlayerNum++;
+    id++;
     socket.emit("PLAYER_ID", {
-      id: id++,
+      id: id,
       name: "Player " + id,
       num: OnlinePlayerNum,
       health: 100
     });
+    console.log("client connected - sessionid: " + id);
   });
 
   socket.on("USER_INITIATED", userData => {
     clients.forEach(player => {
-      console.log("Sending to client: " + player);
-      socket.emit("GET_EXISTING_PLAYER", player);
+      socket.emit("GET_EXISTING_PLAYER", player); //we should consider looping on client instead to avoid emitting N times
     });
     clients.push(userData);
-    //console.log("userData" + userData);
+    console.log("- sending already online player data to id: " + userData.id);
+
     socket.broadcast.emit("A_USER_INITIATED", userData);
+    console.log("- broadcasting new player data");
+  });
+
+  /* ----- Actions ----- */
+  socket.on("CLIENT_MOVE", function(movementData) {
+    for (var i = 0; i < clients.length; i++)
+      if (clients[i].id == movementData.id) {
+        clients[i].position = movementData.position;
+        clients[i].rotation = movementData.rotation;
+        socket.broadcast.emit("OTHER_PLAYER_MOVED", movementData);
+        //console.log("Client moved: " + movementData.id+ " x: "+ movementData.position.x );
+        return;
+      }
+  });
+
+  socket.on("CLIENT_UPDATE_HEALTH", function(healthData) {
+    for (var i = 0; i < clients.length; i++)
+      if (clients[i].id == healthData.id) {
+        clients[i].health = healthData.health;
+        socket.broadcast.emit("OTHER_PLAYER_HEALTHCHANGE", healthData);
+        return;
+      }
   });
 
   // socket.on("REPLAY_TO_CONNECT",(userData)=>{
@@ -52,27 +77,6 @@ io.on("connection", function (socket) {
 
   // });
 
-  socket.on("CLIENT_MOVE", function (movementData) {
-    for (var i = 0; i < clients.length; i++)
-      if (clients[i].id == movementData.id) {
-        clients[i].position = movementData.position;
-        clients[i].rotation = movementData.rotation;
-        socket.broadcast.emit("OTHER_PLAYER_MOVED", movementData);
-        //console.log("Client moved: " + movementData.id+ " x: "+ movementData.position.x );
-        return;
-      }
-  });
-
-  socket.on("CLIENT_UPDATE_HEALTH", function (healthData) {
-    for (var i = 0; i < clients.length; i++)
-      if (clients[i].id == healthData.id) {
-        clients[i].health = healthData.health;
-        socket.broadcast.emit("OTHER_PLAYER_HEALTHCHANGE", healthData);
-        return;
-      }
-    console.log(healthData);
-  });
-
   // socket.on("disconnect", function(){
   // 	socket.broadcast.emit("USER_DISCONNECTED", currentUser);
   // 	for (var i = 0; i < clients.length; i++){
@@ -84,6 +88,6 @@ io.on("connection", function (socket) {
   // });
 });
 
-server.listen(app.get("port"), function () {
+server.listen(app.get("port"), function() {
   console.log("---SERVER IS RUNNING AT " + app.get("port") + "---");
 });

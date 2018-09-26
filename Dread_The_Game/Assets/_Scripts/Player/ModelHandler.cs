@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+/* Loads and instantiates the needed model prefabs under the player gameobject. (Character, Weapon etc)*/
 public class ModelHandler : MonoBehaviour
 {
 

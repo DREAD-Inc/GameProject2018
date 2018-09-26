@@ -34,7 +34,7 @@ public class OtherPlayerController : MonoBehaviour
             transform.position = pp.position;
             transform.rotation = pp.rotation;
             lastpos = transform.position;
-            print(id + ": " + pp.position);
+            //print(id + ": " + pp.position);
         }
     }
 }

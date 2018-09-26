@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LaserGun : Weapon
+public class PrimaryWeapon : Weapon
 {
 
     void Start()
@@ -19,7 +19,5 @@ public class LaserGun : Weapon
     protected override void Shoot()
     {
         projectile.gameObject.SetActive(true);
-        var a = projectile.GetComponent<Collider>();
-        //a
     }
 }
