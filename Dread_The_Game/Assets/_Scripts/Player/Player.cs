@@ -6,8 +6,9 @@ public class Player : MonoBehaviour
 {
     [Header("Base Stats")]
     public int id;
-    public string playerName = "Player"; //+id
+    public string playerName = "Player";
     public float health;
+    public float maxHealth = 100; // set from characterprefab
 
     [Header("Models")]
     public ModelHandler.weapons weapon = ModelHandler.weapons.LaserGun;
@@ -39,15 +40,16 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-
+        gameController.SendPlayerHealth(id, amount);
+        /*
         health -= amount;
-        if (health > 0) gameController.SendClientHealth(id, health);
+        if (health > 0) gameController.SendPlayerHealth(id, health);
         else
         {
             health = 0;
             print(this.name + " has died");
         }
-        //Die()
+        //Die()*/
     }
 
     public void SetFromPlayerParams(PlayerParams pp)

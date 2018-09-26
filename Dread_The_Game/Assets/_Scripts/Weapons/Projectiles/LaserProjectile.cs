@@ -37,7 +37,7 @@ public class LaserProjectile : MonoBehaviour
         {
             var hitPlayer = other.transform.parent.parent.GetComponent<Player>();
             //print("Lasering " + hitPlayer.name);
-            hitPlayer.GetComponent<Player>().TakeDamage(2f * Time.deltaTime * 10);
+            hitPlayer.GetComponent<Player>().TakeDamage(-2f * Time.deltaTime * 10);
         }
     }
 }

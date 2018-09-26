@@ -78,12 +78,13 @@ io.on("connection", function(socket) {
       }
   });
 
-  socket.on("CLIENT_UPDATE_HEALTH", function(healthData) {
+  socket.on("UPDATE_HEALTH", function(healthData) {
     healthChanges++;
     for (var i = 0; i < clients.length; i++)
       if (clients[i].id == healthData.id) {
-        clients[i].health = healthData.health;
-        socket.broadcast.emit("OTHER_PLAYER_HEALTHCHANGE", healthData);
+        clients[i].health += healthData.health;
+        healthData.health = clients[i].health;
+        io.emit("PLAYER_HEALTHCHANGE", healthData);
         return;
       }
   });

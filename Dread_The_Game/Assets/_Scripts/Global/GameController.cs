@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour
     private GameObject otherCharPrefab;
     private GameObject mapPrefab;
     private List<PlayerParams> players;
+    private Player clientPlayer;
     public List<GameObject> playerObjects;
 
     private Helpers helpers;
@@ -34,7 +35,7 @@ public class GameController : MonoBehaviour
         socket.On("A_USER_INITIATED", AddNewPlayer); //Called when a new player joins after this client
         socket.On("GET_EXISTING_PLAYER", AddExistingPlayer); //Spawns all players that were already in the game
         socket.On("OTHER_PLAYER_MOVED", SetOtherPlayerMove);
-        socket.On("OTHER_PLAYER_HEALTHCHANGE", SetOtherPlayerHealthChange);
+        socket.On("PLAYER_HEALTHCHANGE", SetPlayerHealthChange);
 
         charPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/Player", typeof(GameObject));
         otherCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject));
@@ -61,6 +62,7 @@ public class GameController : MonoBehaviour
         PlayerParams playerParams = new PlayerParams(newP.id, newP.name, newP.health, new Vector3(0, 0f, 0f), Quaternion.Euler(0, 0, 0), new ModelHandler.characters(), new ModelHandler.weapons());
         character.GetComponent<Player>().SetFromPlayerParams(playerParams);
         character.GetComponent<Rigidbody>().MovePosition(new Vector3(PlayerNum, 1f, PlayerNum));
+        clientPlayer = character.GetComponent<Player>();
         var data = new JSONObject(JsonUtility.ToJson(playerParams));
         socket.Emit("USER_INITIATED", data);
     }
@@ -99,10 +101,10 @@ public class GameController : MonoBehaviour
         socket.Emit("CLIENT_MOVE", JSONObject.Create(JsonUtility.ToJson(obj)));
     }
 
-    public void SendClientHealth(int id, float health)
+    public void SendPlayerHealth(int id, float health)
     {
         var obj = new HealthObjJSON(id, health);
-        socket.Emit("CLIENT_UPDATE_HEALTH", JSONObject.Create(JsonUtility.ToJson(obj)));
+        socket.Emit("UPDATE_HEALTH", JSONObject.Create(JsonUtility.ToJson(obj)));
 
     }
 
@@ -118,13 +120,18 @@ public class GameController : MonoBehaviour
             }
     }
 
-    private void SetOtherPlayerHealthChange(SocketIOEvent evt)
+    private void SetPlayerHealthChange(SocketIOEvent evt)
     {
-        var health = JsonUtility.FromJson<HealthObjJSON>(evt.data.ToString());
+        var healthChange = JsonUtility.FromJson<HealthObjJSON>(evt.data.ToString());
+        if (clientPlayer.id == healthChange.id)
+        {
+            clientPlayer.health = healthChange.health;
+        }
+
         foreach (var p in playerObjects)
-            if (p.GetComponent<Player>().id == health.id)
+            if (p.GetComponent<Player>().id == healthChange.id)
             {
-                p.GetComponent<Player>().health = health.health;
+                p.GetComponent<Player>().health = healthChange.health;
             }
     }
 

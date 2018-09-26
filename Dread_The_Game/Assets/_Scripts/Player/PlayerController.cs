@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 /* This file handles movement and physics for the player */
 public class PlayerController : MonoBehaviour
@@ -21,6 +23,9 @@ public class PlayerController : MonoBehaviour
     private Vector3 lastPos;
     private Quaternion lastRot;
 
+    private Slider healthBar;
+    private Text healthBarText;
+
 
     public Weapon weapon;
     public GameController gameController;
@@ -36,6 +41,10 @@ public class PlayerController : MonoBehaviour
         player = GetComponent<Player>();
         weapon = player.weaponComponent;
         lastPos = Vector3.zero;
+        healthBar = GameObject.FindGameObjectWithTag("ClientHealthBar").GetComponent<Slider>();
+        healthBar.value = player.health;
+        healthBarText = GameObject.FindGameObjectWithTag("ClientHealthBar").GetComponentInChildren<Text>();
+        healthBarText.text = player.health + " | " + player.maxHealth;
         //lastRot = Quaternion.Euler(0,-90,0);
     }
 
@@ -71,6 +80,11 @@ public class PlayerController : MonoBehaviour
         else if (weapon) weapon.isShooting = false;
 
         if (!weapon) weapon = player.weaponComponent;
+
+        //update healthbar
+        healthBar.value = player.health;
+        healthBarText.text = player.health + " / " + player.maxHealth;
+
     }
 
     //Physics are not calculated in sync with the normal update (where input should be collected), it should be handled in FixedUpdate
@@ -90,6 +104,11 @@ public class PlayerController : MonoBehaviour
             lastPos = transform.position;
             lastRot = transform.rotation;
         }
+    }
+
+    void UpdateHealthBar()
+    {
+
     }
 
     private void UpdateSettings()
