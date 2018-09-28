@@ -11,5 +11,6 @@ public class Weapon : MonoBehaviour
     void Start() { }
     void Update() { }
     protected Transform projectile;
+    protected Transform reptileBall;
     protected virtual void Shoot() { }
 }

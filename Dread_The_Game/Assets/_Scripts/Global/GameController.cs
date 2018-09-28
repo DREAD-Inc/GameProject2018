@@ -43,7 +43,7 @@ public class GameController : MonoBehaviour
         otherCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject));
         mapPrefab = (GameObject)Resources.Load("Prefabs/Maps/TestMap", typeof(GameObject));
 
-        //Instantiate(mapPrefab);
+        Instantiate(mapPrefab);
     }
 
     void Update() { }

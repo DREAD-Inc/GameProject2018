@@ -6,7 +6,7 @@ using UnityEngine;
 public class ModelHandler : MonoBehaviour
 {
 
-    public enum weapons { LaserGun, FireThrower }
+    public enum weapons { LaserGun, FireThrower, ReptileGun }
     public enum characters { CapsuleBot }
 
     private GameObject prefab;
