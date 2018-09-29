@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterTrigger : MonoBehaviour {
+public class FollowingGlobes : MonoBehaviour {
   
   public GlobeController globe;
   public float globeSpeed;
@@ -12,7 +12,7 @@ public class CharacterTrigger : MonoBehaviour {
   public Transform firePoint;
 
   LineRenderer line;
-    private float maxLineLength = 12f;
+    public float maxLineLength = 25f;
     void Start()
     {
         line = GetComponent<LineRenderer>();

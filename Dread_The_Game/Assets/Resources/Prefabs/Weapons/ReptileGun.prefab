@@ -189,13 +189,13 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1254831328989550}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.051999904, y: 0.11900005, z: 0.32399988}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4159746152086834}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4841505530355936
 Transform:
   m_ObjectHideFlags: 1
@@ -393,9 +393,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globe: {fileID: 114564186039858198, guid: d4dbee414a3ac41678d3db6d3cccd7bb, type: 2}
   globeSpeed: 6
-  timeBetweenShots: 0.4
+  timeBetweenShots: 1
   firePoint: {fileID: 4502311341988920}
-  maxLineLength: 25
 --- !u!120 &120962863319360360
 LineRenderer:
   m_ObjectHideFlags: 1
@@ -441,8 +440,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.015872955
-        value: 0.9594574
+        time: 0
+        value: 0.7567558
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -450,22 +449,22 @@ LineRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.5652235
-        value: 0.70270157
-        inSlope: 0
-        outSlope: 0
+        time: 0.40119916
+        value: 0.74324226
+        inSlope: -0.24476893
+        outSlope: -0.24476893
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
-        outWeight: 0
+        outWeight: 0.57102925
       - serializedVersion: 3
-        time: 0.82111746
-        value: 0.5405408
-        inSlope: -0.67819804
-        outSlope: -0.67819804
+        time: 1
+        value: 0.7432442
+        inSlope: -0.37097448
+        outSlope: -0.37097448
         tangentMode: 0
         weightedMode: 0
-        inWeight: 1
+        inWeight: 0.772758
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
