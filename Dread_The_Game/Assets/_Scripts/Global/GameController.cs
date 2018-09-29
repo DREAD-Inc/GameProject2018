@@ -37,7 +37,7 @@ public class GameController : MonoBehaviour
         socket.On("OTHER_PLAYER_MOVED", SetOtherPlayerMove);
         socket.On("PLAYER_HEALTHCHANGE", SetPlayerHealthChange);
         socket.On("OTHER_PLAYER_DEAD", DestroyDeadPlayer);
-
+        socket.On("USER_DISCONNECTED", DestroyDisconnectedPlayer);
 
         charPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/Player", typeof(GameObject));
         otherCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject));
@@ -154,6 +154,19 @@ public class GameController : MonoBehaviour
                 return;
             }
     }
+     private void DestroyDisconnectedPlayer(SocketIOEvent evt)
+    {
+        var id = Int32.Parse(evt.data.GetField("id").ToString());
+        print("Disconnecting " + id);
+        foreach (var p in playerObjects)
+            if (p.GetComponent<Player>().id == id)
+            {
+                print("other player disconnected: " + id);
+                p.GetComponent<OtherPlayerController>().Die();
+                return;
+            }
+    }
+    
 
     public PlayerParams GetPlayerParams(int id)
     {

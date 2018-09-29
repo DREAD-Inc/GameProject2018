@@ -40,15 +40,17 @@ setInterval(function() {
 }, 10000);
 
 io.on("connection", function(socket) {
-  //var currentUser;
-  //var AllReadyOnline = [];
+
+  //Properties for the current connected player
+  var currentPlayerId;
 
   /* --------------- Connection --------------- */
   socket.on("USER_CONNECT", function() {
     OnlinePlayerNum++;
     id++;
+    currentPlayerId = id;
     socket.emit("PLAYER_ID", {
-      id: id,
+      id: currentPlayerId,
       name: "Player " + id,
       num: OnlinePlayerNum,
       health: 100
@@ -98,46 +100,42 @@ io.on("connection", function(socket) {
 
   socket.on("PLAYER_DEAD", function(data) {
     //console.log("length: " + clients.length);
-    for (var i = 0; i < clients.length; i++)
-      if (clients[i].id == data) clients.splice(i, 1);
+    removePlayerFromList(data);
     //console.log("length: " + clients.length);
 
     console.log("- remove and broadcast player dead ID: " + data + "\r\n");
     socket.broadcast.emit("OTHER_PLAYER_DEAD", { id: data });
   });
 
-  // socket.on("REPLAY_TO_CONNECT",(userData)=>{
-  // 	AllReadyOnline.push(userData);
-  // 	if(AllReadyOnline.length == OnlinePlayerNum -1){
-  // 		socket.emit("ALL_USERS_INFO", AllReadyOnline);
-  // 	}
-  // });
 
-  // socket.on("PLAY", function( data ){
-  // 	currentUser = {
-  // 		name:data.name,
-  // 		position:data.position
-  // 	}
-  // clients.push(currentUser);
-  // socket.emit("PLAY", currentUser);
-  // socket.broadcast.emit("USER_CONNECTED", currentUser)
+  /* --------------- Disconnection --------------- */
 
-  // });
-
-  // socket.on("disconnect", function(){
-  // 	socket.broadcast.emit("USER_DISCONNECTED", currentUser);
-  // 	for (var i = 0; i < clients.length; i++){
-  // 		if (client[i].name = currentUser.name){
-  // 			console.log( "User " + clients[i].name + " Disconnected");
-  // 			client.splice(i,1);
-  // 		}
-  // 	}
-  // });
+  socket.on("disconnect", function(){
+    console.log("Player with id " + currentPlayerId + " has disconncted");
+    io.emit("USER_DISCONNECTED", {id : currentPlayerId});
+    removePlayerFromList(currentPlayerId);
+  });
 });
 
 server.listen(app.get("port"), function() {
   console.log("---SERVER IS RUNNING AT " + app.get("port") + "--- \r\n");
 });
+
+
+
+
+  /* --------------- Helpers --------------- */
+
+
+var removePlayerFromList = (data) => {
+  for (var i = 0; i < clients.length; i++){
+    if (clients[i].id == data){
+       clients.splice(i, 1);
+       console.log("Player with id " + data + " has been removed from the list");
+      }
+
+  }
+}
 
 String.prototype.toHHMMSS = function() {
   var sec_num = parseInt(this, 10);
