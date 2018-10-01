@@ -14,7 +14,7 @@ public class ReptileWeapon : Weapon
 
     public Transform firePoint;
     private Transform ReptileTrigger;
-
+    private CharacterTrigger charachterTrigger;
     void Start()
     {
           //firePoint =  transform.Find("GameObject");
@@ -39,6 +39,8 @@ public class ReptileWeapon : Weapon
         }else {
             //shotCounter = 0;
              ReptileTrigger.gameObject.SetActive(false);
+             charachterTrigger = ReptileTrigger.GetComponent<CharacterTrigger>();
+             charachterTrigger.hasTriggered = false;
 
         }
     }
@@ -46,5 +48,6 @@ public class ReptileWeapon : Weapon
     protected override void Shoot()
     {
         ReptileTrigger.gameObject.SetActive(true);
+      
     }
 }
