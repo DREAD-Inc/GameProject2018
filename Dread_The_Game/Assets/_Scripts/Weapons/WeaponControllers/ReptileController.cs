@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterTrigger : MonoBehaviour {
-  
-  public GlobeController globe;
+public class ReptileController : MonoBehaviour
+{
 
-  public Transform firePoint;
-  public bool hasTriggered;
+    public GlobeProjectile globe;
+
+    public Transform firePoint;
+    public bool hasTriggered;
 
 
-  LineRenderer line;
+    LineRenderer line;
     private float maxLineLength = 12f;
-    
+
     void Start()
     {
         line = GetComponent<LineRenderer>();
@@ -27,7 +28,7 @@ public class CharacterTrigger : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if(!hasTriggered) ManageCollision(other);
+        if (!hasTriggered) ManageCollision(other);
     }
 
 
@@ -39,9 +40,8 @@ public class CharacterTrigger : MonoBehaviour {
         if (distance < maxLineLength)
             line.SetPosition(1, new Vector3(0, 0, distance));
 
+        GlobeProjectile newGlobe = Instantiate(globe, firePoint.position, firePoint.rotation) as GlobeProjectile;
+        newGlobe.targetCharachter = other.gameObject;
 
-			    GlobeController newGlobe = Instantiate(globe,firePoint.position,firePoint.rotation) as GlobeController;
-				newGlobe.targetCharachter = other.gameObject;
-		
     }
 }

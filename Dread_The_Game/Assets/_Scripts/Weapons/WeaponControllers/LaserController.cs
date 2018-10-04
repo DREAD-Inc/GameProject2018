@@ -2,20 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LaserProjectile : MonoBehaviour
+public class LaserController : Weapon
 {
     LineRenderer line;
     public float maxLineLength = 10;
+    public GameObject laserProjectile;
     void Start()
     {
-        line = GetComponent<LineRenderer>();
+        line = laserProjectile.GetComponent<LineRenderer>();
     }
     void Update()
     {
         //If laser has been shortened, smoothly expand
         if (line.GetPosition(1).z < maxLineLength)
             line.SetPosition(1, new Vector3(0, 0, Mathf.Lerp(line.GetPosition(1).z, maxLineLength, Time.deltaTime * 4)));
+
+        if (isShooting) Shoot();
+        else StopShooting();
     }
+
+    protected override void Shoot() { laserProjectile.SetActive(true); }
+    protected override void StopShooting() { laserProjectile.SetActive(false); }
+
     private void OnTriggerEnter(Collider other)
     {
         ManageCollision(other);

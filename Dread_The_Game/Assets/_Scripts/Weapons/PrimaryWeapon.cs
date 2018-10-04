@@ -7,7 +7,7 @@ public class PrimaryWeapon : Weapon
 
     void Start()
     {
-        projectile = transform.Find("Projectile");
+        //projectile = transform.Find("Controller");
     }
 
     void Update()

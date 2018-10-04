@@ -7,34 +7,38 @@ public class PlasmaRifle : Weapon
 
 
     public PlasmaRoundController prc;
-    public float globeSpeed=5f;
+    public float globeSpeed = 5f;
 
     public float timeBetweenShots;
-    private float shotCounter=5;
+    private float shotCounter = 5;
 
     public Transform firePoint;
     private Transform ReptileTrigger;
-    private CharacterTrigger charachterTrigger;
+    //private CharacterTrigger charachterTrigger;
     void Start()
     {
-          firePoint =  transform.Find("bullet_init");
-          //prc = GetComponent<PlasmaRoundController>();
+        firePoint = transform.Find("bullet_init");
+        //prc = GetComponent<PlasmaRoundController>();
     }
 
     void Update()
     {
-        if (isShooting){
+        if (isShooting)
+        {
 
-            
+
             shotCounter -= Time.deltaTime;
 
-            if(shotCounter <= 0){
+            if (shotCounter <= 0)
+            {
                 shotCounter = timeBetweenShots;
                 Debug.Log(firePoint);
-                PlasmaRoundController newGlobe = Instantiate(prc,firePoint.position,firePoint.rotation) as PlasmaRoundController;
+                PlasmaRoundController newGlobe = Instantiate(prc, firePoint.position, firePoint.rotation) as PlasmaRoundController;
                 newGlobe.speed = globeSpeed;
             }
-        }else {
+        }
+        else
+        {
             shotCounter = 0;
         }
     }

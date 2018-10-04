@@ -37,7 +37,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4028248510545264}
-  - component: {fileID: 114274138423843380}
+  - component: {fileID: 114640653957989926}
   m_Layer: 0
   m_Name: LaserGun
   m_TagString: Untagged
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 65483734708204114}
   - component: {fileID: 114824085109450538}
   m_Layer: 2
-  m_Name: Projectile
+  m_Name: LaserProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -409,7 +409,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.50000036, y: 0.5, z: 10.500008}
   m_Center: {x: 0.00000023841858, y: 0, z: 5.0000043}
---- !u!114 &114274138423843380
+--- !u!114 &114640653957989926
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -417,22 +417,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 1039296154114056}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49ee428421c16d043b2168821e1cc04e, type: 3}
+  m_Script: {fileID: 11500000, guid: 144d9295710f5dd4584d5123ba7e011a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isShooting: 0
+  maxLineLength: 10
+  laserProjectile: {fileID: 1947913405312740}
 --- !u!114 &114824085109450538
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1947913405312740}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 144d9295710f5dd4584d5123ba7e011a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isShooting: 0
   maxLineLength: 10
+  laserProjectile: {fileID: 0}
 --- !u!120 &120795808266051776
 LineRenderer:
   m_ObjectHideFlags: 1

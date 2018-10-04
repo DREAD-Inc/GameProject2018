@@ -147,7 +147,8 @@ MonoBehaviour:
   id: 0
   playerName: Player
   health: 100
-  weapon: 0
+  maxHealth: 100
+  weapon: 2
   character: 0
   weaponComponent: {fileID: 0}
   speed: 8

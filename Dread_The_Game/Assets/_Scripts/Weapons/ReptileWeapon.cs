@@ -6,7 +6,7 @@ public class ReptileWeapon : Weapon
 {
 
 
-    public GlobeController globe;
+    public GlobeProjectile globe;
     public float globeSpeed;
 
     public float timeBetweenShots;
@@ -14,20 +14,21 @@ public class ReptileWeapon : Weapon
 
     public Transform firePoint;
     private Transform ReptileTrigger;
-    private CharacterTrigger charachterTrigger;
+    private ReptileController charachterTrigger;
     void Start()
     {
-          //firePoint =  transform.Find("GameObject");
-          ReptileTrigger = transform.Find("ReptileTrigger");
-          //globe = GetComponent<GlobeController>();
+        //firePoint =  transform.Find("GameObject");
+        ReptileTrigger = transform.Find("ReptileTrigger");
+        //globe = GetComponent<GlobeController>();
     }
 
     void Update()
     {
-        if (isShooting){
+        if (isShooting)
+        {
 
             Shoot();
-            
+
             // shotCounter -= Time.deltaTime;
 
             // if(shotCounter <= 0){
@@ -36,11 +37,13 @@ public class ReptileWeapon : Weapon
             //     GlobeController newGlobe = Instantiate(globe,firePoint.position,firePoint.rotation) as GlobeController;
             //     newGlobe.speed = globeSpeed;
             // }
-        }else {
+        }
+        else
+        {
             //shotCounter = 0;
-             ReptileTrigger.gameObject.SetActive(false);
-             charachterTrigger = ReptileTrigger.GetComponent<CharacterTrigger>();
-             charachterTrigger.hasTriggered = false;
+            ReptileTrigger.gameObject.SetActive(false);
+            charachterTrigger = ReptileTrigger.GetComponent<ReptileController>();
+            charachterTrigger.hasTriggered = false;
 
         }
     }
@@ -48,6 +51,6 @@ public class ReptileWeapon : Weapon
     protected override void Shoot()
     {
         ReptileTrigger.gameObject.SetActive(true);
-      
+
     }
 }

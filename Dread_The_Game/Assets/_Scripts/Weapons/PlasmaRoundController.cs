@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlasmaRoundController : MonoBehaviour {
-	public float speed;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		transform.Translate(Vector3.forward*speed*Time.deltaTime);
-	
-	}
+public class PlasmaRoundController : MonoBehaviour
+{
+    public float speed;
+
+    void Update()
+    {
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+
+    }
 }
