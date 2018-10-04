@@ -50,9 +50,11 @@ public class Player : MonoBehaviour
         playerName = pp.name;
         health = pp.health;
         //gameObject.transform.position = pp.position;
-
-        if (weapon != pp.weapon) { weaponComponent = wh.InstantiateWeapon(pp.weapon); weapon = pp.weapon; }
+        print("here2 " + pp.weapon + " " + weapon);
+        if (weapon != pp.weapon) { weapon = pp.weapon; weaponComponent = wh.InstantiateWeapon(weapon); }
         if (character != pp.character) { wh.InstantiateCharacter(pp.character); character = pp.character; }
+        print("here3");
+
     }
 
     void Update() { }

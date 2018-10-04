@@ -62,11 +62,13 @@ public class GameController : MonoBehaviour
         if (Dbug) Debug.Log("The Provided id is " + newP.id);
         var character = Instantiate(charPrefab, new Vector3(0, 0f, 0f), Quaternion.Euler(0, -90, 0));
         PlayerParams playerParams = new PlayerParams(newP.id, newP.name, newP.health, new Vector3(0, 0f, 0f), Quaternion.Euler(0, 0, 0), new ModelHandler.characters(), new ModelHandler.weapons());
-        character.GetComponent<Player>().SetFromPlayerParams(playerParams);
-        character.GetComponent<Rigidbody>().MovePosition(new Vector3(PlayerNum, 1f, PlayerNum));
-        clientPlayer = character.GetComponent<Player>();
         var data = new JSONObject(JsonUtility.ToJson(playerParams));
         socket.Emit("USER_INITIATED", data);
+        Debug.Log("USER_INITIATED emitted");
+        character.GetComponent<Rigidbody>().MovePosition(new Vector3(PlayerNum, 1f, PlayerNum));
+        character.GetComponent<Player>().SetFromPlayerParams(playerParams);
+        clientPlayer = character.GetComponent<Player>();
+
     }
 
     private void AddNewPlayer(SocketIOEvent evt) //Add each player that joins after this client
@@ -154,7 +156,7 @@ public class GameController : MonoBehaviour
                 return;
             }
     }
-     private void DestroyDisconnectedPlayer(SocketIOEvent evt)
+    private void DestroyDisconnectedPlayer(SocketIOEvent evt)
     {
         var id = Int32.Parse(evt.data.GetField("id").ToString());
         print("Disconnecting " + id);
@@ -166,7 +168,7 @@ public class GameController : MonoBehaviour
                 return;
             }
     }
-    
+
 
     public PlayerParams GetPlayerParams(int id)
     {

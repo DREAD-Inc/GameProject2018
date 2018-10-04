@@ -26,7 +26,7 @@ setInterval(function() {
     lastHealths = healthChanges;
     lastOnline = OnlinePlayerNum;
     return console.log(
-      "Players Online: " + OnlinePlayerNum,
+      "Players Online: " + clients.length,
       " Server Uptime: " +
         process
           .uptime()
@@ -40,7 +40,6 @@ setInterval(function() {
 }, 10000);
 
 io.on("connection", function(socket) {
-
   //Properties for the current connected player
   var currentPlayerId;
 
@@ -59,6 +58,7 @@ io.on("connection", function(socket) {
   });
 
   socket.on("USER_INITIATED", userData => {
+    console.log(userData.weapon);
     clients.forEach(player => {
       socket.emit("GET_EXISTING_PLAYER", player); //we should consider looping on client instead to avoid emitting N times
     });
@@ -107,12 +107,11 @@ io.on("connection", function(socket) {
     socket.broadcast.emit("OTHER_PLAYER_DEAD", { id: data });
   });
 
-
   /* --------------- Disconnection --------------- */
 
-  socket.on("disconnect", function(){
+  socket.on("disconnect", function() {
     console.log("Player with id " + currentPlayerId + " has disconncted");
-    io.emit("USER_DISCONNECTED", {id : currentPlayerId});
+    io.emit("USER_DISCONNECTED", { id: currentPlayerId });
     removePlayerFromList(currentPlayerId);
   });
 });
@@ -121,21 +120,16 @@ server.listen(app.get("port"), function() {
   console.log("---SERVER IS RUNNING AT " + app.get("port") + "--- \r\n");
 });
 
+/* --------------- Helpers --------------- */
 
-
-
-  /* --------------- Helpers --------------- */
-
-
-var removePlayerFromList = (data) => {
-  for (var i = 0; i < clients.length; i++){
-    if (clients[i].id == data){
-       clients.splice(i, 1);
-       console.log("Player with id " + data + " has been removed from the list");
-      }
-
+var removePlayerFromList = data => {
+  for (var i = 0; i < clients.length; i++) {
+    if (clients[i].id == data) {
+      clients.splice(i, 1);
+      console.log("Player with id " + data + " has been removed from the list");
+    }
   }
-}
+};
 
 String.prototype.toHHMMSS = function() {
   var sec_num = parseInt(this, 10);
