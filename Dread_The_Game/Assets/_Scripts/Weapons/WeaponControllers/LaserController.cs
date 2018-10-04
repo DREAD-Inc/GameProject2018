@@ -7,6 +7,7 @@ public class LaserController : Weapon
     LineRenderer line;
     public float maxLineLength = 10;
     public GameObject laserProjectile;
+
     void Start()
     {
         line = laserProjectile.GetComponent<LineRenderer>();
@@ -40,12 +41,14 @@ public class LaserController : Weapon
         if (distance < maxLineLength)
             line.SetPosition(1, new Vector3(0, 0, distance));
 
-        //Deal damage to other player
-        if (other.gameObject.tag == "OtherPlayer") //the part of the character model containing the collider should have this tag
-        {
-            var hitPlayer = other.transform.parent.parent.GetComponent<Player>();
-            //print("Lasering " + hitPlayer.name);
-            hitPlayer.GetComponent<Player>().TakeDamage(-2f * Time.deltaTime * 10);
-        }
+
+        DealDamage(other, 2f);
+        // //Deal damage to other player
+        // if (other.gameObject.tag == "OtherPlayer") //the part of the character model containing the collider should have this tag
+        // {
+        //     var hitPlayer = other.transform.parent.parent.GetComponent<Player>();
+        //     //print("Lasering " + hitPlayer.name);
+        //     hitPlayer.GetComponent<Player>().TakeDamage(-2f * Time.deltaTime * 10);
+        // }
     }
 }

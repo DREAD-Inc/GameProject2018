@@ -10,8 +10,22 @@ public class Weapon : MonoBehaviour
     public bool isShooting;
     void Start() { }
     void Update() { }
-    protected Transform projectile;
+    //protected Transform projectile;
     //protected Transform reptileBall;
     protected virtual void Shoot() { }
     protected virtual void StopShooting() { }
+
+    //protected virtual void OnTriggerEnter(Collider other) {}
+    //protected virtual void OnTriggerStay(Collider other) {}
+    protected virtual void DealDamage(Collider other, float amount)
+    {
+        print(other.gameObject.tag);
+        //Deal damage to other player
+        if (other.gameObject.tag == "OtherPlayer") //the part of the character model containing the collider should have this tag
+        {
+            var hitPlayer = other.transform.parent.parent.GetComponent<Player>();
+            //print("Lasering " + hitPlayer.name);
+            hitPlayer.GetComponent<Player>().TakeDamage(-amount * Time.deltaTime * 10);
+        }
+    }
 }

@@ -23,23 +23,22 @@ public class PlasmaRifle : Weapon
 
     void Update()
     {
-        if (isShooting)
+        if (isShooting) Shoot();
+        else StopShooting();
+    }
+
+    protected override void Shoot()
+    {
+        shotCounter -= Time.deltaTime;
+
+        if (shotCounter <= 0)
         {
-
-
-            shotCounter -= Time.deltaTime;
-
-            if (shotCounter <= 0)
-            {
-                shotCounter = timeBetweenShots;
-                Debug.Log(firePoint);
-                PlasmaRoundController newGlobe = Instantiate(prc, firePoint.position, firePoint.rotation) as PlasmaRoundController;
-                newGlobe.speed = globeSpeed;
-            }
-        }
-        else
-        {
-            shotCounter = 0;
+            shotCounter = timeBetweenShots;
+            Debug.Log(firePoint);
+            PlasmaRoundController newGlobe = Instantiate(prc, firePoint.position, firePoint.rotation) as PlasmaRoundController;
+            newGlobe.speed = globeSpeed;
         }
     }
+    protected override void StopShooting() { shotCounter = 0; }
+
 }
