@@ -5,7 +5,6 @@ using UnityEngine;
 public class CharacterTrigger : MonoBehaviour {
   
   public GlobeController globe;
-  public float globeSpeed;
 
   public Transform firePoint;
   public bool hasTriggered;
@@ -42,7 +41,6 @@ public class CharacterTrigger : MonoBehaviour {
 
 
 			    GlobeController newGlobe = Instantiate(globe,firePoint.position,firePoint.rotation) as GlobeController;
-                newGlobe.speed = globeSpeed;
 				newGlobe.targetCharachter = other.gameObject;
 		
     }

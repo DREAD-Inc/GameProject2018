@@ -4,21 +4,22 @@ using UnityEngine;
 
 public class GlobeController : MonoBehaviour {
 
-	public float speed;
+	public float smoothSpeed = 6f;
 	public GameObject targetCharachter;
 	Vector3 newVector;
 	// Use this for initialization
 
     void FixedUpdate(){
 		newVector = stupidBestFirstSearch(targetCharachter);
-		transform.position += newVector;
+		transform.position = Vector3.MoveTowards(transform.position, targetCharachter.transform.position , Time.deltaTime * smoothSpeed);
+
 	}
-	void OnCollisionEnter (Collider other)
+	void OnCollisionEnter (Collision other)
     {
 		ManageCollision(other);
     }
 
-    private void ManageCollision(Collider other){
+    private void ManageCollision(Collision other){
 	 //Deal damage to other player
   	var hitPlayer = other.transform.parent.parent.GetComponent<Player>();
     print("Colliding " + hitPlayer.name);

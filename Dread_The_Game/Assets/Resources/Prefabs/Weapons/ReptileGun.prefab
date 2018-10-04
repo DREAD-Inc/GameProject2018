@@ -377,7 +377,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isShooting: 0
   globe: {fileID: 114564186039858198, guid: d4dbee414a3ac41678d3db6d3cccd7bb, type: 2}
-  globeSpeed: 5
+  globeSpeed: 0.2
   timeBetweenShots: 0.2
   firePoint: {fileID: 4502311341988920}
 --- !u!114 &114757392234612760
@@ -392,9 +392,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   globe: {fileID: 114564186039858198, guid: d4dbee414a3ac41678d3db6d3cccd7bb, type: 2}
-  globeSpeed: 6
-  timeBetweenShots: 1
   firePoint: {fileID: 4502311341988920}
+  hasTriggered: 0
 --- !u!120 &120962863319360360
 LineRenderer:
   m_ObjectHideFlags: 1
