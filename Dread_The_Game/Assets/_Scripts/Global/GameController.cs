@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour
     private SocketIOComponent socket;
     private GameObject charPrefab;
     private GameObject otherCharPrefab;
+    private GameObject repBullet;
     private GameObject mapPrefab;
     private List<PlayerParams> players;
     private Player clientPlayer;
@@ -38,7 +39,7 @@ public class GameController : MonoBehaviour
         socket.On("PLAYER_HEALTHCHANGE", SetPlayerHealthChange);
         socket.On("OTHER_PLAYER_DEAD", DestroyDeadPlayer);
         socket.On("USER_DISCONNECTED", DestroyDisconnectedPlayer);
-
+        socket.On("BULLET_INITIATED", InitiateOtherBullet);   
         charPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/Player", typeof(GameObject));
         otherCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject));
         mapPrefab = (GameObject)Resources.Load("Prefabs/Maps/TestMap", typeof(GameObject));
@@ -67,6 +68,7 @@ public class GameController : MonoBehaviour
         Debug.Log("USER_INITIATED emitted");
         character.GetComponent<Rigidbody>().MovePosition(new Vector3(PlayerNum, 1f, PlayerNum));
         character.GetComponent<Player>().SetFromPlayerParams(playerParams);
+        character.GetComponent<Player>().SetAsMainPlayer();
         clientPlayer = character.GetComponent<Player>();
 
     }
@@ -176,6 +178,11 @@ public class GameController : MonoBehaviour
             if (p.id == id) return p;
         return null;
     }
+
+    public void InitiatePlayerBullet(/*needs bulletparams*/){
+        //Some parameters has to be set
+        socket.Emit("BULLET_INITIATED");
+    }
     #endregion
 
 
@@ -213,6 +220,12 @@ public class GameController : MonoBehaviour
         Instantiate(newCharPrefab, newPlayerParams.getPosition(), Quaternion.Euler(newPlayerParams.getRotation().x, newPlayerParams.getRotation().y, newPlayerParams.getRotation().z));
         newCharPrefab.GetComponent<Player>().id = newPlayerParams.getId();
         //players.Add(newPlayerParams);
+    }
+    public void InitiateOtherBullet(SocketIOEvent evt){
+
+    GameObject repBullet = (GameObject)Resources.Load("Prefabs/Weapons/ReptileGunAssets/ReptileGlobe", typeof(GameObject)); 
+    Instantiate(repBullet, new Vector3(0,0,0), Quaternion.Euler(0,0,0));
+    // The id have to be set
     }
 }
 

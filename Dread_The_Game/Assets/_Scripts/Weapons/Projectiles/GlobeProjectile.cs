@@ -7,10 +7,18 @@ public class GlobeProjectile : MonoBehaviour
 
     public float smoothSpeed = 6f;
     public GameObject targetCharachter;
+    public bool fromMainPlayer = false;
+    private GameController gameController;
 
+    void start(){
+        gameController = GameObject.FindGameObjectWithTag("Global").GetComponent<GameController>();
+
+    }
     void FixedUpdate()
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetCharachter.transform.position, Time.deltaTime * smoothSpeed);
+        if(fromMainPlayer){
+            transform.position = Vector3.MoveTowards(transform.position, targetCharachter.transform.position, Time.deltaTime * smoothSpeed);
+        }
     }
 
     void OnCollisionEnter(Collision other)

@@ -10,6 +10,7 @@ public class ReptileController : Weapon
     public Transform firePoint;
     public GameObject laserBeam;
     public bool hasTriggered;
+    private GameController gameController;
 
 
     LineRenderer line;
@@ -18,10 +19,13 @@ public class ReptileController : Weapon
     void Start()
     {
         line = laserBeam.GetComponent<LineRenderer>();
+        gameController = GameObject.FindGameObjectWithTag("Global").GetComponent<GameController>();
     }
 
     void Update()
     {
+        print("is main player "+transform.parent.GetComponent<Player>().IsMainPlayer());
+
         //If laser has been shortened, smoothly expand
         if (line.GetPosition(1).z < maxLineLength)
             line.SetPosition(1, new Vector3(0, 0, Mathf.Lerp(line.GetPosition(1).z, maxLineLength, Time.deltaTime * 4)));
@@ -53,7 +57,10 @@ public class ReptileController : Weapon
             line.SetPosition(1, new Vector3(0, 0, distance));
 
         GlobeProjectile newGlobe = Instantiate(globe, firePoint.position, firePoint.rotation) as GlobeProjectile;
+        newGlobe.fromMainPlayer = true;
         newGlobe.targetCharachter = other.gameObject;
+        
+        gameController.InitiatePlayerBullet();
 
     }
 }

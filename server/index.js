@@ -7,6 +7,7 @@ var io = require("socket.io").listen(server);
 app.set("port", process.env.PORT || 3000);
 
 var clients = [];
+var bullets = [];
 var id = 0;
 var OnlinePlayerNum = 0;
 
@@ -107,6 +108,21 @@ io.on("connection", function(socket) {
     socket.broadcast.emit("OTHER_PLAYER_DEAD", { id: data });
   });
 
+
+
+
+  /* --------------- Bullets --------------- */
+
+
+  socket.on("BULLET_INITIATED", function(bulletData) {
+    bullets.push(bulletData)
+    socket.broadcast.emit("BULLET_INITIATED");
+    console.log("bullet was shot");
+  });
+
+  socket.on("BULLET_MOVE", function(movementData) {
+   //Update bullet params and emit
+  });
   /* --------------- Disconnection --------------- */
 
   socket.on("disconnect", function() {
