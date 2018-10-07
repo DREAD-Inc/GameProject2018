@@ -56,10 +56,10 @@ public class ReptileController : Weapon
         GlobeProjectile newGlobe = Instantiate(globe, firePoint.position, firePoint.rotation) as GlobeProjectile;
         newGlobe.fromMainPlayer = true;
         newGlobe.targetCharachter = other.gameObject;
-        int id = (transform.parent.GetComponent<Player>().id * 1000) + 100 + globeId;
-        globeId++;
+        string id = transform.parent.GetComponent<Player>().id.ToString()  + "rep" + globeId.ToString();
         newGlobe.id = id;
-        gameController.InstantiatePlayerBullet(id,"rep",firePoint.position,firePoint.rotation,false);
+        globeId++;
+        gameController.InstantiatePlayerBullet(id,"rep",firePoint.position,false);
 
     }
 }

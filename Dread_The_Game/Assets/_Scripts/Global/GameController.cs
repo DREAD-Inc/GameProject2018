@@ -181,23 +181,23 @@ public class GameController : MonoBehaviour
         return null;
     }
 
-    public BulletParams GetBulletParams(int id)
-    {   Debug.Log("hey i worked"); 
+    public BulletParams GetBulletParams(string id)
+    {       
         foreach (var b in bullets)
             if (b.id == id) return b;
         return null;
     }
 
-    public void InstantiatePlayerBullet(int id, string bt, Vector3 pos, Quaternion rot, bool isExp)
+    public void InstantiatePlayerBullet(string id, string bt, Vector3 pos,  bool isExp)
     {
 
-        var obj = new BulletParams(id, bt, pos, rot, isExp);
+        var obj = new BulletParams(id, bt, pos, isExp);
         socket.Emit("BULLET_INSTANTIATED", JSONObject.Create(JsonUtility.ToJson(obj)));
     }
 
-    public void MoveBullet(int id, Vector3 pos, Quaternion rot)
+    public void MoveBullet(string id, string bt, Vector3 pos, bool isExp)
     {
-        var obj = new MovementObjJSON(id, pos, rot);
+        var obj = new BulletParams(id, bt, pos, isExp);
         socket.Emit("BULLET_MOVE", JSONObject.Create(JsonUtility.ToJson(obj)));
     }
 
@@ -210,20 +210,20 @@ public class GameController : MonoBehaviour
         if(bp.bulletType == "rep"){
             GameObject newBullet; 
             newBullet = (GameObject)Resources.Load("Prefabs/Weapons/ReptileGunAssets/ReptileGlobe", typeof(GameObject)); 
-            Instantiate(newBullet, bp.position, bp.rotation);
             newBullet.GetComponent<GlobeProjectile>().id = bp.id;
+            Instantiate(newBullet, bp.position,  Quaternion.Euler(0, -90, 0));
         }
 
     }
 
     public void SetOtherBulletMove(SocketIOEvent evt)
     {
-        var bp = JsonUtility.FromJson<MovementObjJSON>(evt.data.ToString());
+        var bp = JsonUtility.FromJson<BulletParams>(evt.data.ToString());
          foreach (var b in bullets)
             if (b.id == bp.id)
             {
                 b.position = bp.position;
-                b.rotation = bp.rotation;
+                b.isExploded = bp.isExploded;
             }
        
     }

@@ -114,8 +114,8 @@ io.on("connection", function(socket) {
 
 
   socket.on("BULLET_INSTANTIATED", function(bulletData) {
+    console.log("bullet shot with id: " + bulletData.id);
     socket.broadcast.emit("BULLET_INSTANTIATED",bulletData);
-    console.log("bullet was shot" + bulletData);
   });
 
   socket.on("BULLET_MOVE", function(movementData) {
