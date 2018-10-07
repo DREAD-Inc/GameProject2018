@@ -9,7 +9,6 @@ public class Player : MonoBehaviour
     public string playerName = "Player";
     public float health;
     public float maxHealth = 100; // set from characterprefab
-    public bool mainPlayer = false;
 
     [Header("Models")]
     public ModelHandler.weapons weapon = ModelHandler.weapons.LaserGun;
@@ -57,12 +56,7 @@ public class Player : MonoBehaviour
         print("here3");
 
     }
-    public void SetAsMainPlayer(){
-        this.mainPlayer = true;
-    }
-    public bool IsMainPlayer(){
-        return this.mainPlayer;
-    }
+ 
 
     void Update() { }
 }

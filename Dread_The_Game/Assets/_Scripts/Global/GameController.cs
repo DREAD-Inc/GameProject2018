@@ -16,7 +16,7 @@ public class GameController : MonoBehaviour
     private List<PlayerParams> players;
     private Player clientPlayer;
     public List<GameObject> playerObjects;
-
+    public List<BulletParams> bullets;
     private Helpers helpers;
 
     public bool Dbug = true;
@@ -27,6 +27,7 @@ public class GameController : MonoBehaviour
         socket = GetComponent<SocketIOComponent>();
         players = new List<PlayerParams>();
         playerObjects = new List<GameObject>();
+        bullets = new List<BulletParams>();
         helpers = new Helpers();
 
         //We need to wait for few ms before emiting
@@ -39,7 +40,9 @@ public class GameController : MonoBehaviour
         socket.On("PLAYER_HEALTHCHANGE", SetPlayerHealthChange);
         socket.On("OTHER_PLAYER_DEAD", DestroyDeadPlayer);
         socket.On("USER_DISCONNECTED", DestroyDisconnectedPlayer);
-        socket.On("BULLET_INITIATED", InitiateOtherBullet);   
+        socket.On("BULLET_INSTANTIATED", InstantiateOtherBullet);  
+        socket.On("BULLET_MOVE", SetOtherBulletMove);  
+         
         charPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/Player", typeof(GameObject));
         otherCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject));
         mapPrefab = (GameObject)Resources.Load("Prefabs/Maps/TestMap", typeof(GameObject));
@@ -68,7 +71,6 @@ public class GameController : MonoBehaviour
         Debug.Log("USER_INITIATED emitted");
         character.GetComponent<Rigidbody>().MovePosition(new Vector3(PlayerNum, 1f, PlayerNum));
         character.GetComponent<Player>().SetFromPlayerParams(playerParams);
-        character.GetComponent<Player>().SetAsMainPlayer();
         clientPlayer = character.GetComponent<Player>();
 
     }
@@ -179,53 +181,89 @@ public class GameController : MonoBehaviour
         return null;
     }
 
-    public void InitiatePlayerBullet(/*needs bulletparams*/){
-        //Some parameters has to be set
-        socket.Emit("BULLET_INITIATED");
+    public BulletParams GetBulletParams(int id)
+    {   Debug.Log("hey i worked"); 
+        foreach (var b in bullets)
+            if (b.id == id) return b;
+        return null;
     }
+
+    public void InstantiatePlayerBullet(int id, string bt, Vector3 pos, Quaternion rot, bool isExp)
+    {
+
+        var obj = new BulletParams(id, bt, pos, rot, isExp);
+        socket.Emit("BULLET_INSTANTIATED", JSONObject.Create(JsonUtility.ToJson(obj)));
+    }
+
+    public void MoveBullet(int id, Vector3 pos, Quaternion rot)
+    {
+        var obj = new MovementObjJSON(id, pos, rot);
+        socket.Emit("BULLET_MOVE", JSONObject.Create(JsonUtility.ToJson(obj)));
+    }
+
     #endregion
 
-
-
-
-    private void initiatePlayer(SocketIOEvent evt)
+    public void InstantiateOtherBullet(SocketIOEvent evt)
     {
+        var bp = JsonUtility.FromJson<BulletParams>(evt.data.ToString());
+        bullets.Add(bp);
+        if(bp.bulletType == "rep"){
+            GameObject newBullet; 
+            newBullet = (GameObject)Resources.Load("Prefabs/Weapons/ReptileGunAssets/ReptileGlobe", typeof(GameObject)); 
+            Instantiate(newBullet, bp.position, bp.rotation);
+            newBullet.GetComponent<GlobeProjectile>().id = bp.id;
+        }
 
-        var id = Int32.Parse(evt.data.GetField("id").ToString());
-        if (Dbug) Debug.Log("The Provided id is " + id);
-        var character = Instantiate(charPrefab, new Vector3(0, 2f, 0f), Quaternion.Euler(0, -90, 0));
-        character.GetComponent<Player>().id = id;
-        Quaternion rotation = new Quaternion();
-        helpers.setQuaternion(ref rotation, 0, -90, 0);
-        PlayerParams playerParams = new PlayerParams(id, "UnNamed", 100f, new Vector3(0, 2f, 0f), rotation, new ModelHandler.characters(), new ModelHandler.weapons());
-        var data = helpers.playerParamsToJSON(playerParams);
-        socket.Emit("USER_INITIATED", data);
     }
-    private void addNewPlayer(SocketIOEvent evt)
+
+    public void SetOtherBulletMove(SocketIOEvent evt)
     {
-
-        PlayerParams newPlayerParams = helpers.JSONToPlayerParams(evt.data);
-        GameObject newCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject)); ;//we have loaded this already in otherCharPrefab
-        Instantiate(newCharPrefab, newPlayerParams.getPosition(), Quaternion.Euler(newPlayerParams.getRotation().x, newPlayerParams.getRotation().y, newPlayerParams.getRotation().z));
-        newCharPrefab.GetComponent<Player>().id = newPlayerParams.getId(); // we need to access the instatiated gameobject instead of the prefab/template var x = Instantiate(y); 
-        if (Dbug) Debug.Log(newPlayerParams.getPosition());
-        //players.Add(newPlayerParams);
-
+        var bp = JsonUtility.FromJson<MovementObjJSON>(evt.data.ToString());
+         foreach (var b in bullets)
+            if (b.id == bp.id)
+            {
+                b.position = bp.position;
+                b.rotation = bp.rotation;
+            }
+       
     }
-    private void addExistingPlayer(SocketIOEvent evt)
-    {
-        if (Dbug) Debug.Log("existing player id is " + evt.data.GetField("id"));
-        PlayerParams newPlayerParams = helpers.JSONToPlayerParams(evt.data);
-        GameObject newCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject)); ;
-        Instantiate(newCharPrefab, newPlayerParams.getPosition(), Quaternion.Euler(newPlayerParams.getRotation().x, newPlayerParams.getRotation().y, newPlayerParams.getRotation().z));
-        newCharPrefab.GetComponent<Player>().id = newPlayerParams.getId();
-        //players.Add(newPlayerParams);
-    }
-    public void InitiateOtherBullet(SocketIOEvent evt){
 
-    GameObject repBullet = (GameObject)Resources.Load("Prefabs/Weapons/ReptileGunAssets/ReptileGlobe", typeof(GameObject)); 
-    Instantiate(repBullet, new Vector3(0,0,0), Quaternion.Euler(0,0,0));
-    // The id have to be set
-    }
+
+
+
+    // private void initiatePlayer(SocketIOEvent evt)
+    // {
+
+    //     var id = Int32.Parse(evt.data.GetField("id").ToString());
+    //     if (Dbug) Debug.Log("The Provided id is " + id);
+    //     var character = Instantiate(charPrefab, new Vector3(0, 2f, 0f), Quaternion.Euler(0, -90, 0));
+    //     character.GetComponent<Player>().id = id;
+    //     Quaternion rotation = new Quaternion();
+    //     helpers.setQuaternion(ref rotation, 0, -90, 0);
+    //     PlayerParams playerParams = new PlayerParams(id, "UnNamed", 100f, new Vector3(0, 2f, 0f), rotation, new ModelHandler.characters(), new ModelHandler.weapons());
+    //     var data = helpers.playerParamsToJSON(playerParams);
+    //     socket.Emit("USER_INITIATED", data);
+    // }
+    // private void addNewPlayer(SocketIOEvent evt)
+    // {
+
+    //     PlayerParams newPlayerParams = helpers.JSONToPlayerParams(evt.data);
+    //     GameObject newCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject)); ;//we have loaded this already in otherCharPrefab
+    //     Instantiate(newCharPrefab, newPlayerParams.getPosition(), Quaternion.Euler(newPlayerParams.getRotation().x, newPlayerParams.getRotation().y, newPlayerParams.getRotation().z));
+    //     newCharPrefab.GetComponent<Player>().id = newPlayerParams.getId(); // we need to access the instatiated gameobject instead of the prefab/template var x = Instantiate(y); 
+    //     if (Dbug) Debug.Log(newPlayerParams.getPosition());
+    //     //players.Add(newPlayerParams);
+
+    // }
+    // private void addExistingPlayer(SocketIOEvent evt)
+    // {
+    //     if (Dbug) Debug.Log("existing player id is " + evt.data.GetField("id"));
+    //     PlayerParams newPlayerParams = helpers.JSONToPlayerParams(evt.data);
+    //     GameObject newCharPrefab = (GameObject)Resources.Load("Prefabs/PlayerCharacters/OtherPlayer", typeof(GameObject)); ;
+    //     Instantiate(newCharPrefab, newPlayerParams.getPosition(), Quaternion.Euler(newPlayerParams.getRotation().x, newPlayerParams.getRotation().y, newPlayerParams.getRotation().z));
+    //     newCharPrefab.GetComponent<Player>().id = newPlayerParams.getId();
+    //     //players.Add(newPlayerParams);
+    // }
+
 }
 
