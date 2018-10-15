@@ -40,11 +40,11 @@ namespace DreadInc
         {
             //Shorten laser on any collision
             var distance = Vector3.Distance(other.transform.position, transform.position);
-            if (distance < maxLineLength)
+            if (line && distance < maxLineLength)
                 line.SetPosition(1, new Vector3(0, 0, distance));
 
 
-            DealDamage(other, 2f);
+            //DealDamage(other, 2f);
             // //Deal damage to other player
             // if (other.gameObject.tag == "OtherPlayer") //the part of the character model containing the collider should have this tag
             // {

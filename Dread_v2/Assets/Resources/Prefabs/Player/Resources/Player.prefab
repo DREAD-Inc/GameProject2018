@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 136731996562299466}
   m_Layer: 0
   m_Name: CapsuleBot
-  m_TagString: Untagged
+  m_TagString: OtherPlayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1292,7 +1292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33726ac08d71f4240b1d158ead19fceb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 12
   jumpDistance: 32
   dashDistance: 5
   smoothSpeed: 10

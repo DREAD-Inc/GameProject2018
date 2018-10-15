@@ -6,7 +6,7 @@ using Photon.Pun;
 
 namespace DreadInc
 {
-    public class AbilityController : MonoBehaviourPun, IPunObservable
+    public class AbilityController : MonoBehaviourPunCallbacks, IPunObservable
     {
 
         private DreadInc.Weapon weapon;
@@ -15,21 +15,13 @@ namespace DreadInc
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
             if (stream.IsWriting)
-            {
-                // We own this player: send the others our data
-                stream.SendNext(isShooting);
-            }
+                stream.SendNext(isShooting);// We own this player: send the others our data
             else
-            {
-                // Network player, receive data
-                this.isShooting = (bool)stream.ReceiveNext();
-            }
+                this.isShooting = (bool)stream.ReceiveNext();// Network player, receive data   
         }
 
         void Start()
         {
-            //weapon = transform.GetChild(transform.childCount - 2).GetComponent<Weapon>(); // only works if the weapon component is the second to last child (see modelhandler)
-            //weapon = GetComponentInChildren<Weapon>();
             SetWeapon();
         }
 
@@ -42,8 +34,11 @@ namespace DreadInc
                 return;
             }
             if (photonView.IsMine) //only get input from local client
-                weapon.isShooting = Input.GetButton("Fire1");
+                isShooting = Input.GetButton("Fire1");
+
+            weapon.isShooting = isShooting;
         }
+
         // void GetInput()
         // {
         //     isShooting = Input.GetButton("Fire1");
@@ -51,7 +46,7 @@ namespace DreadInc
 
         public void SetWeapon()
         {
-            weapon = GetComponentInChildren(typeof(LaserController)) as Weapon;
+            weapon = GetComponentInChildren<Weapon>();
             print("SetWeapon called - " + weapon);
         }
     }

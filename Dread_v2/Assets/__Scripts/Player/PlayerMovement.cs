@@ -36,34 +36,23 @@ namespace DreadInc
         private Vector3 lastPos;
         private Quaternion lastRot;
 
-        //public Weapon weapon;
-        //public GameController gameController;
-
         void Start()
         {
             playerCollider = transform.GetChild(transform.childCount - 1).GetComponent<Collider>(); //charactermodel with collider needs to be the last child of the player obj for this to work
             distToGround = playerCollider.bounds.extents.y;
             //distance from center of collider to end
             //setup gameobjects/components
-            //groundChecker = transform.Find("GroundChecker");
-            //gameController = GameObject.FindGameObjectWithTag("Global").GetComponent<GameController>();
-            //cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
             if (photonView.IsMine && PhotonNetwork.IsConnected)
                 Camera.main.GetComponent<FollowCam>().target = followTarget;
-            //else
-            //    GameObject.Destroy(followTarget);
 
             rigidBody = GetComponent<Rigidbody>();
             rigidBody.drag = 4; // Used for dash. set dashDistance in char attributes instead        
-            //weapon = player.weaponComponent;
             lastPos = Vector3.zero;
 
             // healthBar = GameObject.FindGameObjectWithTag("ClientHealthBar").GetComponent<Slider>();
             // healthBar.value = player.health;
             // healthBarText = GameObject.FindGameObjectWithTag("ClientHealthBar").GetComponentInChildren<Text>();
             // healthBarText.text = player.health + " | " + player.maxHealth;
-            //lastRot = Quaternion.Euler(0,-90,0);
-
         }
 
 
@@ -76,10 +65,6 @@ namespace DreadInc
             //Collect settings from CharacterAttributes
             UpdateSettings();
 
-            //Check if onGround (alternative way of setting onGround that avoids "rocket jump" bug caused by OnCollisionEnter beeing called many times when next to a surface)
-            //onGround = Physics.CheckSphere(groundChecker.position, .5f, ground, QueryTriggerInteraction.Ignore);
-            //onGround = groundChecker.GetComponent<SphereCollider>().bounds.extents.y < 0.1f;
-            //print(groundChecker.GetComponent<SphereCollider>().bounds.extents.y + " " + onGround + " " + IsGrounded());
             //Collect input from WASD and the arrowkeys
             float horiz, horizArrow, verti, vertiArrow;
             horiz = Input.GetAxisRaw("Horizontal");
@@ -96,13 +81,6 @@ namespace DreadInc
             //Movement Actions 
             if (Input.GetButtonDown("Jump")) doJump = true;
             if (Input.GetButtonDown("Dash")) doDash = true;
-
-            //Shoot
-            // if (weapon && (Input.GetButton("Fire1") || (vertiArrow > 0 || horizArrow > 0)))
-            //     weapon.isShooting = true;
-            // else if (weapon) weapon.isShooting = false;
-
-            // if (!weapon) weapon = player.weaponComponent;
 
             //update healthbar
             //healthBar.value = player.health;
@@ -193,6 +171,7 @@ namespace DreadInc
             //var coroutine = TimedDestroy(5.0f);
             //StartCoroutine(coroutine);
         }
+
         // public IEnumerator TimedDestroy(float wait)
         // {
         //     while (true)
