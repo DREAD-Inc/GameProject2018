@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
 
     private ModelHandler wh;
     private GameController gameController;
+
     void Start()
     {
         wh = GetComponent<ModelHandler>();
@@ -34,7 +35,7 @@ public class Player : MonoBehaviour
 
     private void InstantiateModels()
     {
-        weaponComponent = wh.InstantiateWeapon(weapon);
+        wh.InstantiateWeapon(weapon);
         wh.InstantiateCharacter(character);
     }
 
@@ -50,13 +51,9 @@ public class Player : MonoBehaviour
         playerName = pp.name;
         health = pp.health;
         //gameObject.transform.position = pp.position;
-        print("here2 " + pp.weapon + " " + weapon);
-        if (weapon != pp.weapon) { weapon = pp.weapon; weaponComponent = wh.InstantiateWeapon(weapon); }
-        if (character != pp.character) { wh.InstantiateCharacter(pp.character); character = pp.character; }
-        print("here3");
-
+        // print("here2 " + pp.weapon + " " + weapon);
+        // if (weapon != pp.weapon) { weapon = pp.weapon; weaponComponent = wh.InstantiateWeapon(weapon); }
+        // if (character != pp.character) { wh.InstantiateCharacter(pp.character); character = pp.character; }
+        // print("here3");
     }
- 
-
-    void Update() { }
 }

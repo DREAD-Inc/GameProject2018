@@ -47,6 +47,8 @@ namespace DreadInc
         /// </summary>
         public void Connect()
         {
+            // keep track of the will to join a room, because when we come back from the game we will get a callback that we are connected, so we need to know what to do then
+            isConnecting = true;
             progressLabel.SetActive(true);
 
             // if connected, join - else initiate connection to the server.
@@ -67,7 +69,11 @@ namespace DreadInc
         public override void OnConnectedToMaster()
         {
             Debug.Log("OnConnectedToMaster() - was called by PUN");
-            PhotonNetwork.JoinRandomRoom(); //calls back OnJoinRandomFailed() if no room found
+            // we don't want to do anything if we are not attempting to join a room.
+            // this case where isConnecting is false is typically when you lost or quit the game, when this level is loaded, OnConnectedToMaster will be called, in that case
+            // we don't want to do anything.
+            if (isConnecting)
+                PhotonNetwork.JoinRandomRoom(); //calls back OnJoinRandomFailed() if no room found
         }
 
 
@@ -75,7 +81,6 @@ namespace DreadInc
         {
             Debug.LogWarningFormat("OnDisconnected() - reason {0}", cause);
             progressLabel.SetActive(false);
-
         }
 
         public override void OnJoinRandomFailed(short returnCode, string message)

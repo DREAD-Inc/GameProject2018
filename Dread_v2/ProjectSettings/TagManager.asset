@@ -8,6 +8,8 @@ TagManager:
   - GroundPlane
   - OtherPlayer
   - LobbyInteractable
+  - PlayerCollider
+  - Weapon
   layers:
   - Default
   - TransparentFX

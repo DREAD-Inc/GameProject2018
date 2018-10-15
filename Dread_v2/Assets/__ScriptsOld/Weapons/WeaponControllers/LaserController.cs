@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LaserController : Weapon
+public class LaserController : DreadInc.Weapon
 {
     LineRenderer line;
     public float maxLineLength = 10;

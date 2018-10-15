@@ -37,7 +37,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4028248510545264}
-  - component: {fileID: 114640653957989926}
+  - component: {fileID: 114746419244109946}
   - component: {fileID: 54261185654237450}
   m_Layer: 0
   m_Name: LaserGun
@@ -89,7 +89,6 @@ GameObject:
   - component: {fileID: 4632768070131524}
   - component: {fileID: 33791716334865316}
   - component: {fileID: 23492348909024280}
-  - component: {fileID: 135763418389944470}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -424,7 +423,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.50000036, y: 0.5, z: 10.500008}
   m_Center: {x: 0.00000023841858, y: 0, z: 5.0000043}
---- !u!114 &114640653957989926
+--- !u!114 &114746419244109946
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -432,7 +431,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1039296154114056}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 144d9295710f5dd4584d5123ba7e011a, type: 3}
+  m_Script: {fileID: 11500000, guid: 740fde3ca15962d4baf2bc680f62c83f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isShooting: 0
@@ -548,18 +547,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 0
   m_Loop: 0
---- !u!135 &135763418389944470
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1898597853836094}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &136304110635803788
 CapsuleCollider:
   m_ObjectHideFlags: 1
