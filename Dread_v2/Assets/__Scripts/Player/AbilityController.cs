@@ -1,45 +1,58 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 
 namespace DreadInc
 {
-    public class AbilityController : MonoBehaviour
+    public class AbilityController : MonoBehaviourPun, IPunObservable
     {
 
-        public DreadInc.Weapon weapon;
+        private DreadInc.Weapon weapon;
+        private bool isShooting;
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting)
+            {
+                // We own this player: send the others our data
+                stream.SendNext(isShooting);
+            }
+            else
+            {
+                // Network player, receive data
+                this.isShooting = (bool)stream.ReceiveNext();
+            }
+        }
+
         void Start()
         {
             //weapon = transform.GetChild(transform.childCount - 2).GetComponent<Weapon>(); // only works if the weapon component is the second to last child (see modelhandler)
-            weapon = GetComponentInChildren<Weapon>();
+            //weapon = GetComponentInChildren<Weapon>();
+            SetWeapon();
         }
 
-        // Update is called once per frame
         void Update()
         {
-            //weapon = transform.GetChild(transform.childCount - 2).GetComponent<Weapon>();
-
             if (!weapon)
             {
                 //print("weapon component not set in abilitycontroller");
                 SetWeapon();
                 return;
             }
-            //Shoot
-            if ((Input.GetButton("Fire1") /*|| (vertiArrow > 0 || horizArrow > 0)*/))
-                weapon.isShooting = true;
-            else weapon.isShooting = false;
-
-            //if (!weapon) weapon = player.weaponComponent;
+            if (photonView.IsMine) //only get input from local client
+                weapon.isShooting = Input.GetButton("Fire1");
         }
+        // void GetInput()
+        // {
+        //     isShooting = Input.GetButton("Fire1");
+        // }
 
         public void SetWeapon()
         {
             weapon = GetComponentInChildren(typeof(LaserController)) as Weapon;
-            print(weapon);
-            print("SetWeapon called");
-            //this.weapon = weapon;
+            print("SetWeapon called - " + weapon);
         }
     }
 }

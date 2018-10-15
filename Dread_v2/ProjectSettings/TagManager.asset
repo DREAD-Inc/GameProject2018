@@ -10,6 +10,7 @@ TagManager:
   - LobbyInteractable
   - PlayerCollider
   - Weapon
+  - DamagingObject
   layers:
   - Default
   - TransparentFX

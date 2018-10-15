@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 
 /* This file handles movement and physics for the player */
 namespace DreadInc
 {
-    public class PlayerMovement : MonoBehaviour
+    public class PlayerMovement : MonoBehaviourPun
     {
 
         [Header("Settings")]
@@ -47,7 +48,11 @@ namespace DreadInc
             //groundChecker = transform.Find("GroundChecker");
             //gameController = GameObject.FindGameObjectWithTag("Global").GetComponent<GameController>();
             //cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-            Camera.main.GetComponent<FollowCam>().target = followTarget;
+            if (photonView.IsMine && PhotonNetwork.IsConnected)
+                Camera.main.GetComponent<FollowCam>().target = followTarget;
+            //else
+            //    GameObject.Destroy(followTarget);
+
             rigidBody = GetComponent<Rigidbody>();
             rigidBody.drag = 4; // Used for dash. set dashDistance in char attributes instead        
             //weapon = player.weaponComponent;
@@ -64,6 +69,9 @@ namespace DreadInc
 
         void Update()
         {
+            if (!photonView.IsMine && PhotonNetwork.IsConnected)
+                return;
+
             if (dying || checkIfDead()) return;
             //Collect settings from CharacterAttributes
             UpdateSettings();
@@ -109,6 +117,9 @@ namespace DreadInc
         //Physics are not calculated in sync with the normal update (where input should be collected), it should be handled in FixedUpdate
         void FixedUpdate()
         {
+            if (!photonView.IsMine && PhotonNetwork.IsConnected)
+                return;
+
             //if (dying) return;
             if (IsGrounded() && doJump) Jump();
             if (doDash) Dash();
