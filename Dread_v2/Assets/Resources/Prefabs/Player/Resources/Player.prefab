@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 114977498988120288}
   - component: {fileID: 114101175962757650}
   - component: {fileID: 114481826044537530}
+  - component: {fileID: 114619776416795294}
   - component: {fileID: 54080277896752886}
   m_Layer: 0
   m_Name: Player
@@ -1297,6 +1298,17 @@ MonoBehaviour:
   dashDistance: 5
   smoothSpeed: 10
   gravityIncrease: 25
+--- !u!114 &114619776416795294
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1309768990585846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d0fd6230dc49784784433a83106c8f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   followTarget: {fileID: 4159388970702808}
 --- !u!114 &114794588129058258
 MonoBehaviour:

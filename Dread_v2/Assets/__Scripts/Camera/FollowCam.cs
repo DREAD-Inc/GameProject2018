@@ -19,12 +19,6 @@ namespace DreadInc
         public float smooth = 8f;
         public float scrollSens = 10f;
 
-
-        void Start()
-        {
-
-        }
-
         void FixedUpdate()
         {
             if (!target) { return; }

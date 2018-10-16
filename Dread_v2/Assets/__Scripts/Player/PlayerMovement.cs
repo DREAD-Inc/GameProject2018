@@ -18,9 +18,9 @@ namespace DreadInc
         public float smoothSpeed = 10f;
         public float gravityIncrease = 25f;
 
-        [Header("References")]
-        [SerializeField]
-        private Transform followTarget;
+        // [Header("References")]
+        // [SerializeField]
+        // private Transform followTarget;
 
         //Internally set references
         private Collider playerCollider;
@@ -39,12 +39,7 @@ namespace DreadInc
         void Start()
         {
             playerCollider = transform.GetChild(transform.childCount - 1).GetComponent<Collider>(); //charactermodel with collider needs to be the last child of the player obj for this to work
-            distToGround = playerCollider.bounds.extents.y;
-            //distance from center of collider to end
-            //setup gameobjects/components
-            if (photonView.IsMine && PhotonNetwork.IsConnected)
-                Camera.main.GetComponent<FollowCam>().target = followTarget;
-
+            distToGround = playerCollider.bounds.extents.y; //distance from center of collider to outside of collider
             rigidBody = GetComponent<Rigidbody>();
             rigidBody.drag = 4; // Used for dash. set dashDistance in char attributes instead        
             lastPos = Vector3.zero;
