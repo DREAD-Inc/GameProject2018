@@ -28,16 +28,16 @@ namespace DreadInc
 
         void OnTriggerEnter(Collider other)
         {
-            //print(this.name + " " + other.tag);
-            if (!photonView.IsMine || !(other.tag == "DamagingObject")) return;
+            print(this.name + " " + other.tag);
+            if (photonView.IsMine || !(other.tag == "DamagingObject")) return;
             //var amount = other.GetComponent<projectileStats?>().GetDamage();
             Health -= 10f;
         }
 
         void OnTriggerStay(Collider other)
         {
-            //print(this.name + " " + other.tag);
-            if (!photonView.IsMine || !(other.tag == "DamagingObject")) return;
+            print(this.name + " " + other.tag + " " + photonView.IsMine);
+            if (photonView.IsMine || !(other.tag == "DamagingObject")) return;
             //var amount = other.GetComponent<projectileStats?>().GetDOT();
             Health -= 3f * Time.deltaTime;
         }

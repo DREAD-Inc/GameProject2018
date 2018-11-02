@@ -16,13 +16,10 @@ namespace DreadInc
 
         private bool targetSet;
 
-        //private Camera mainCam;
-
-        // Use this for initialization
         void Awake()
         {
             // #Important
-            // used in GameManager.cs: we keep track of the localPlayer instance to prevent instantiation when levels are synchronized
+            // keep track of the localPlayer instance to prevent instantiation when levels are synchronized
             if (photonView.IsMine)
             {
                 PlayerManager.LocalPlayerInstance = this.gameObject;

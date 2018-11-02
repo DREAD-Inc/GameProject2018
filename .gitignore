@@ -101,3 +101,23 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+Dread_v2/Assets/Photon/PhotonUnityNetworking/Code.meta
+Dread_v2/Assets/Photon/PhotonUnityNetworking.meta
+Dread_v2/Assets/Photon/PhotonRealtime/Code/PhotonRealtime.asmdef
+Dread_v2/Assets/Photon/PhotonRealtime/Code/ConnectionHandler.cs.meta
+Dread_v2/Assets/Photon/PhotonRealtime/Code.meta
+Dread_v2/Assets/Photon/PhotonRealtime.meta
+Dread_v2/Assets/Photon/PhotonLibs/WebSocket/websocket-sharp.dll.meta
+Dread_v2/Assets/Photon/PhotonLibs/WebSocket/websocket-sharp.README.meta
+Dread_v2/Assets/Photon/PhotonLibs/WebSocket/WebSocket.jslib.meta
+Dread_v2/Assets/Photon/PhotonLibs/WebSocket/WebSocket.cs.meta
+Dread_v2/Assets/Photon/PhotonLibs/WebSocket/PhotonWebSocket.asmdef.meta
+Dread_v2/Assets/Photon/PhotonLibs/WebSocket/PhotonWebSocket.asmdef
+Dread_v2/Assets/Photon/PhotonLibs/WebSocket.meta
+Dread_v2/Assets/Photon/PhotonLibs/Photon3Unity3D.xml.meta
+Dread_v2/Assets/Photon/PhotonLibs/Photon3Unity3D.dll.meta
+Dread_v2/Assets/Photon/PhotonLibs/Metro/Photon3Unity3D.pri.meta
+Dread_v2/Assets/Photon/PhotonLibs/Metro/Photon3Unity3D.dll.meta
+Dread_v2/Assets/Photon/PhotonLibs/Metro.meta
+Dread_v2/Assets/Photon/PhotonLibs.meta
+Dread_v2/Assets/Photon.meta
