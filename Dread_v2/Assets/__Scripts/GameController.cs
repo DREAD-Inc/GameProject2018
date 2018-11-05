@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections;
-
+using System.Linq;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
 using Photon.Pun;
 using Photon.Realtime;
-
+using Photon.Pun.UtilityScripts;
 
 namespace DreadInc
 {
@@ -16,7 +15,9 @@ namespace DreadInc
     {
         public static GameController Instance;
         public GameObject playerPrefab;
-        public GameObject[] spawnPositions;
+        public bool usingTeams;
+
+        public GameObject[] spawnPoints;
 
         void Start()
         {
@@ -29,8 +30,15 @@ namespace DreadInc
             {
                 Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManager.GetActiveScene().name);
                 // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-                var spawnGO = spawnPositions[(int)UnityEngine.Random.Range(0f, spawnPositions.Length)];
-                PhotonNetwork.Instantiate(this.playerPrefab.name, spawnGO.transform.position, Quaternion.identity, 0);
+
+                if (!usingTeams)
+                {
+                    //spawn at random position
+                    PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+                    PhotonNetwork.LocalPlayer.SetTeam(PunTeams.Team.none);
+                }
+                else
+                    SetTeamInstantiate();
             }
         }
 
@@ -71,6 +79,22 @@ namespace DreadInc
 
 
         #region Public Methods
+
+        public void SetTeamInstantiate()
+        {
+            print(PhotonNetwork.LocalPlayer.GetPlayerNumber() + " " + PhotonNetwork.PlayerList.Length % 2);
+            if (PhotonNetwork.PlayerList.Length % 2 == 0)//even / uneven
+                PhotonNetwork.LocalPlayer.SetTeam(PunTeams.Team.red);
+            else
+                PhotonNetwork.LocalPlayer.SetTeam(PunTeams.Team.blue);
+
+            var spawn = spawnPoints[PhotonNetwork.PlayerList.Length].transform; //not -1 because player is added after this
+            PhotonNetwork.Instantiate(this.playerPrefab.name, spawn.position, Quaternion.identity, 0);
+
+            //foreach (var x in PhotonNetwork.PlayerList)
+            //    print(x.GetTeam());
+        }
+
         public void LeaveRoom()
         {
             PhotonNetwork.LeaveRoom();

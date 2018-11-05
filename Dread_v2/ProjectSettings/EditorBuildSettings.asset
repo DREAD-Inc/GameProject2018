@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/test_freeplay.unity
     guid: 169bc3c7475564e4a9d4df03994a5dd6
+  - enabled: 1
+    path: Assets/_Scenes/test_teamDM.unity
+    guid: af05547435d14de41ab30ecead36d627
   m_configObjects: {}

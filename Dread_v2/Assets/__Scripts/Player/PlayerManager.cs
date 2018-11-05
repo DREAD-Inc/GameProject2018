@@ -26,7 +26,7 @@ namespace DreadInc
             }
             // #Critical
             // we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
-            DontDestroyOnLoad(this.gameObject);
+            //DontDestroyOnLoad(this.gameObject);
             //mainCam = Camera.main;
 
         }
@@ -40,8 +40,8 @@ namespace DreadInc
         void SetCamFollowTarget()
         {
             //if (Camera.main.GetComponent<FollowCam>().target) return; //do nothing if target already set
-            var comp = Camera.main.GetComponent<FollowCam>().target;
-            print("set cam follow" + Camera.main.GetComponent<FollowCam>().target);
+            //var comp = Camera.main.GetComponent<FollowCam>().target;
+            //print("set cam follow" + Camera.main.GetComponent<FollowCam>().target);
             if (photonView.IsMine)
                 Camera.main.GetComponent<FollowCam>().target = followTarget;
             if (Camera.main.GetComponent<FollowCam>().target) targetSet = true;

@@ -1,10 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 namespace DreadInc
 {
-    public class PlayInteractable : InteractableController
+    public class TeamDMPlayInteractable : InteractableController
     {
         public Launcher launcher;
 
@@ -15,7 +14,7 @@ namespace DreadInc
                 print("Launcher reference not set on " + this.name);
                 return;
             }
-            launcher.Connect("test_freeplay");
+            launcher.Connect("test_teamDM");
         }
     }
 }

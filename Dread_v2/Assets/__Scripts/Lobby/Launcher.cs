@@ -18,6 +18,8 @@ namespace DreadInc
         [SerializeField]
         private GameObject progressLabel;
 
+        private string levelToLoad;
+
         /// <summary>
         /// Keep track of the current process. Since connection is asynchronous and is based on several callbacks from Photon,
         /// we need to keep track of this to properly adjust the behavior when we receive call back by Photon.
@@ -45,8 +47,9 @@ namespace DreadInc
         /// - If already connected, we attempt joining a random room
         /// - if not yet connected, Connect this application instance to Photon Cloud Network
         /// </summary>
-        public void Connect()
+        public void Connect(string level)
         {
+            levelToLoad = level;
             // keep track of the will to join a room, because when we come back from the game we will get a callback that we are connected, so we need to know what to do then
             isConnecting = true;
             progressLabel.SetActive(true);
@@ -100,7 +103,7 @@ namespace DreadInc
                 Debug.Log("Load freeplay test ");
 
                 // Load the Room Level.
-                PhotonNetwork.LoadLevel("test_freeplay");
+                PhotonNetwork.LoadLevel(levelToLoad);
             }
         }
         #endregion
