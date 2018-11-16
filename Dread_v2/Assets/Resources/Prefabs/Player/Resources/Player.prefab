@@ -1297,7 +1297,7 @@ MonoBehaviour:
   jumpDistance: 32
   dashDistance: 5
   smoothSpeed: 10
-  gravityIncrease: 25
+  gravityIncrease: 55
 --- !u!114 &114619776416795294
 MonoBehaviour:
   m_ObjectHideFlags: 1

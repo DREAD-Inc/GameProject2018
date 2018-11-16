@@ -14,7 +14,7 @@ namespace DreadInc
                 print("Launcher reference not set on " + this.name);
                 return;
             }
-            launcher.Connect("test_teamDM");
+            launcher.Connect("test_teamDM 1");
         }
     }
 }
